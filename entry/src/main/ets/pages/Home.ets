@@ -1,6 +1,7 @@
 import { getHomeDataApi } from '../api/home';
 import { BannerListDataSource } from '../models/HomeData';
 import SwiperLayout from '../views/Home/SwiperLayout';
+import SearchBar from '../views/Home/SearchBar';
 
 
 @Component
@@ -13,17 +14,22 @@ export default struct Home {
     console.log(JSON.stringify(result))
   }
 
-  // 生命周期函数：初始阿虎渲染时触发
+  // 生命周期函数：初始化渲染时触发
   aboutToAppear(): void {
     this.getHomeData()
   }
 
   build() {
     Scroll() {
-      Column() {
-        SwiperLayout({ bannerList: this.bannerList })
-      }
-      .width('100%')
+      Stack() {
+        Column() {
+          // 轮播图组件
+          SwiperLayout({ bannerList: this.bannerList })
+        }
+        .width('100%')
+
+        SearchBar()
+      }.width('100%').alignContent(Alignment.TopStart)
     }
     .width('100%')
     .height('100%')
