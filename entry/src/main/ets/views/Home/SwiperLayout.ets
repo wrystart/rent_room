@@ -1,12 +1,12 @@
-import { BannerListDataSource, IBannerItem } from '../../models/HomeData';
+import { IBannerItem, IBannerList } from '../../models/HomeData';
 
 @Component
 export default struct SwiperLayout {
-  @ObjectLink bannerList: BannerListDataSource;
+  @Prop bannerList: IBannerList;
 
   build() {
     Swiper() {
-      LazyForEach(this.bannerList, (banner: IBannerItem) => {
+      ForEach(this.bannerList, (banner: IBannerItem) => {
         Image(banner.imageURL).width('100%').height('100%').objectFit(ImageFit.Fill)
       }, (banner: IBannerItem) => banner.id + '')
     }

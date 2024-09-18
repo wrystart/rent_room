@@ -1,15 +1,15 @@
-import { getHomeDataApi } from '../api/home';
-import { BannerListDataSource } from '../models/HomeData';
-import SwiperLayout from '../views/Home/SwiperLayout';
+import { getHomeDataApi } from '../api/home'
+import { IBannerList } from '../models/HomeData'
+import SwiperLayout from '../views/Home/SwiperLayout'
 
 
 @Component
 export default struct Home {
-  @State bannerList: BannerListDataSource = new BannerListDataSource();
+  @State bannerList: IBannerList = []
   // 获取首页数据函数
   getHomeData = async () => {
     const result = await getHomeDataApi()
-    this.bannerList.setList(result.bannerList)
+    this.bannerList = result.bannerList
     console.log(JSON.stringify(result))
   }
 
