@@ -108,14 +108,14 @@ export interface INavItem {
 
 export type INavList = INavItem[]
 
-export interface ITitleItem {
+export interface ITileItem {
   "id": number,
   "imageURL": string,
   "title": string,
   "sub_title": string
 }
 
-export type ITileList = ITitleItem[]
+export type ITileList = ITileItem[]
 
 export interface IPlanItem {
   "id": number,
