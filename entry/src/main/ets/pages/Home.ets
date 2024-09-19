@@ -5,7 +5,7 @@ import SearchBar from '../views/Home/SearchBar';
 import NavList from '../views/Home/NavList';
 import TileList from '../views/Home/TileList';
 
-import { PADDING } from '../contants/size';
+import { PADDING, SHADOW_RADIUS } from '../contants/size';
 import PlanList from '../views/Home/PlanList';
 
 @Component
@@ -14,6 +14,7 @@ export default struct Home {
   @State navList: INavList = [];
   @State tileList: ITileList = [];
   @State planList: IPlanList = [];
+  @State adPicture: string = '';
   // 获取首页数据函数
   getHomeData = async () => {
     const result = await getHomeDataApi()
@@ -21,6 +22,7 @@ export default struct Home {
     this.navList = result.navList;
     this.tileList = result.tileList;
     this.planList = result.planList;
+    this.adPicture = result.adPicture;
   }
 
   // 生命周期函数：初始化渲染时触发
@@ -41,6 +43,19 @@ export default struct Home {
             TileList({ tileList: this.tileList })
             // 计划列表
             PlanList({ planList: this.planList })
+            // 广告
+            Image(this.adPicture)
+              .width('100%')
+              .height(60)
+              .objectFit(ImageFit.Fill)
+              .margin({ top: 10 })
+              .shadow({
+                offsetX: 0,
+                offsetY: 0,
+                radius: SHADOW_RADIUS,
+                color: 'rgba(0, 0, 0, 0.14)'
+              })
+
           }
           .width('100%').padding({ left: PADDING, right: PADDING })
         }
