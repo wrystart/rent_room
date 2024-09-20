@@ -25,15 +25,46 @@ export default struct Home {
     this.planList = result.planList;
     this.adPicture = result.adPicture;
   }
+  // 存储滚动条位置（y轴滚动距离）
+  scrollY: number = 0;
+  @State bgColor: string = 'rgba(0,0,0,0)'
+  @State fontColor: string = 'rgba(255,255,255,1)'
 
   // 生命周期函数：初始化渲染时触发
   aboutToAppear(): void {
     this.getHomeData()
   }
 
+  // 处理滚动事件
+  handleScroll = (xOffset: number, yOffset: number) => {
+    // 更新滚动距离
+    this.scrollY += yOffset;
+    // 计算颜色
+    this.calcColor()
+  }
+  calcColor = () => {
+    if (this.scrollY < 10) {
+      // 到达顶部，渐变开始
+      this.bgColor = 'rgba(255,255,255,0)';
+      this.fontColor = 'rgb(255,255,255)';
+
+    } else if (this.scrollY <= 100) {
+      // 渐变中（透明度 0 -> 1）
+      const colorOpacity = (this.scrollY - 10) / (100 - 10);
+      this.bgColor = `rgba(255,255,255,${colorOpacity})`;
+      this.fontColor = `rgba(0,0,0,${colorOpacity})`;
+
+    } else {
+      // 渐变全部完成
+      this.bgColor = 'rgb(255,255,255)';
+      this.fontColor = 'rgb(0,0,0)';
+    }
+  }
+
   build() {
-    Scroll() {
-      Stack() {
+    Stack() {
+      Scroll() {
+
         Column() {
           // 轮播图组件
           SwiperLayout({ bannerList: this.bannerList })
@@ -65,13 +96,15 @@ export default struct Home {
         }
         .width('100%')
 
-        // 搜索区
-        SearchBar()
-      }.width('100%').alignContent(Alignment.TopStart)
-    }
-    .width('100%')
-    .height('100%')
-    .scrollBar(BarState.Off)
-    .align(Alignment.TopStart)
+      }
+      .width('100%')
+      .height('100%')
+      .scrollBar(BarState.Off)
+      .align(Alignment.TopStart)
+      .onDidScroll(this.handleScroll)
+
+      // 搜索区
+      SearchBar({ bgColor: this.bgColor, fontColor: this.fontColor })
+    }.width('100%').alignContent(Alignment.TopStart)
   }
 }
