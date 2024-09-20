@@ -1,5 +1,5 @@
 import { getHomeDataApi } from '../api/home';
-import { BannerListDataSource, INavList, IPlanList, ITileList } from '../models/HomeData';
+import { BannerListDataSource, IColor, INavList, IPlanList, ITileList } from '../models/HomeData';
 import SwiperLayout from '../views/Home/SwiperLayout';
 import SearchBar from '../views/Home/SearchBar';
 import NavList from '../views/Home/NavList';
@@ -8,6 +8,7 @@ import TileList from '../views/Home/TileList';
 import { PADDING, SHADOW_RADIUS } from '../contants/size';
 import PlanList from '../views/Home/PlanList';
 import RoomRecommend from '../views/Home/RoomRecommend';
+import ScrollContainer from '../components/ScrollContainer/Index';
 
 @Component
 export default struct Home {
@@ -61,50 +62,51 @@ export default struct Home {
     }
   }
 
-  build() {
-    Stack() {
-      Scroll() {
+  @Builder
+  navBuilder($$: IColor) {
+    // 搜索区
+    SearchBar({ bgColor: $$.bgColor, fontColor: $$.fontColor })
+  }
 
-        Column() {
-          // 轮播图组件
-          SwiperLayout({ bannerList: this.bannerList })
-          Column() {
-            // 导航栏
-            NavList({ navList: this.navList })
-            // titleList
-            TileList({ tileList: this.tileList })
-            // 计划列表
-            PlanList({ planList: this.planList })
-            // 广告
-            Image(this.adPicture)
-              .width('100%')
-              .height(60)
-              .objectFit(ImageFit.Fill)
-              .margin({ top: 10 })
-              .shadow({
-                offsetX: 0,
-                offsetY: 0,
-                radius: SHADOW_RADIUS,
-                color: 'rgba(0, 0, 0, 0.14)'
-              })
-
-          }
-          .width('100%').padding({ left: PADDING, right: PADDING })
-
-          // 房源推荐
-          RoomRecommend()
-        }
+  @Builder
+  contentBuilder() {
+    // Builder函数this指向默认是undefined
+    // 轮播图组件
+    SwiperLayout({ bannerList: this.bannerList })
+    Column() {
+      // 导航栏
+      NavList({ navList: this.navList })
+      // titleList
+      TileList({ tileList: this.tileList })
+      // 计划列表
+      PlanList({ planList: this.planList })
+      // 广告
+      Image(this.adPicture)
         .width('100%')
+        .height(60)
+        .objectFit(ImageFit.Fill)
+        .margin({ top: 10 })
+        .shadow({
+          offsetX: 0,
+          offsetY: 0,
+          radius: SHADOW_RADIUS,
+          color: 'rgba(0, 0, 0, 0.14)'
+        })
 
+    }
+    .width('100%').padding({ left: PADDING, right: PADDING })
+
+    // 房源推荐
+    RoomRecommend()
+  }
+
+  build() {
+    ScrollContainer({
+      navBuilderParam: this.navBuilder,
+      contentBuilderParam: () => {
+        // 让 Builder 函数this指向组件实例
+        this.contentBuilder()
       }
-      .width('100%')
-      .height('100%')
-      .scrollBar(BarState.Off)
-      .align(Alignment.TopStart)
-      .onDidScroll(this.handleScroll)
-
-      // 搜索区
-      SearchBar({ bgColor: this.bgColor, fontColor: this.fontColor })
-    }.width('100%').alignContent(Alignment.TopStart)
+    })
   }
 }
