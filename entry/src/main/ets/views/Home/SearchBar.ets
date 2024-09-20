@@ -2,7 +2,6 @@ import { PADDING, PADDING_S } from '../../contants/size';
 
 @Component
 export default struct SearchBar {
-  @Prop bgColor: string;
   @Prop fontColor: string;
 
   build() {
@@ -41,7 +40,6 @@ export default struct SearchBar {
       top: 4,
       bottom: 4
     })
-    .backgroundColor(this.bgColor)
 
   }
 }

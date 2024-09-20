@@ -1,6 +1,7 @@
 import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
+import { JSON } from '@kit.ArkTS';
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
@@ -11,7 +12,7 @@ export default class EntryAbility extends UIAbility {
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onDestroy');
   }
 
-  onWindowStageCreate(windowStage: window.WindowStage): void {
+  async onWindowStageCreate(windowStage: window.WindowStage): Promise<void> {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
@@ -22,6 +23,20 @@ export default class EntryAbility extends UIAbility {
       }
       hilog.info(0x0000, 'testTag', 'Succeeded in loading the content.');
     });
+
+    // 1.设置全屏
+    // 应用窗口对象
+    const windowClass = await windowStage.getMainWindow()
+    // 设置全屏
+    windowClass.setWindowLayoutFullScreen(true)
+    // 获取状态栏高度
+    const avoidArea = windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)
+    // 注意：单位是px
+    const topHeight = avoidArea.topRect.height;
+    // 将状态栏高度存储起来
+    AppStorage.setOrCreate('topHeight', px2vp(topHeight))
+    // const prop = windowClass.getWindowProperties()
+    hilog.info(0x0000, 'cnm', JSON.stringify(avoidArea));
   }
 
   onWindowStageDestroy(): void {

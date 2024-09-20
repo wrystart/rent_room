@@ -2,6 +2,7 @@ import { IColor } from '../../models/HomeData';
 
 @Component
 export default struct Index {
+  @StorageProp('topHeight') topHeight: number = 0;
   @BuilderParam navBuilderParam: ($$: IColor) => void = this.customBuilder
   @BuilderParam contentBuilderParam: () => void = this.customBuilder
   // 存储滚动条位置（y轴滚动距离）
@@ -58,7 +59,9 @@ export default struct Index {
 
       // 搜索区
       // 按引用传递，传递的参数可为状态变量，且状态变量的改变会引起\@Builder方法内的UI刷新
-      this.navBuilderParam({ bgColor: this.bgColor, fontColor: this.fontColor })
+      Column() {
+        this.navBuilderParam({fontColor: this.fontColor })
+      }.backgroundColor(this.bgColor).padding({ top: this.topHeight })
     }.width('100%').alignContent(Alignment.TopStart)
   }
 }

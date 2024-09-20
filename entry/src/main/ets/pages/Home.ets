@@ -65,7 +65,7 @@ export default struct Home {
   @Builder
   navBuilder($$: IColor) {
     // 搜索区
-    SearchBar({ bgColor: $$.bgColor, fontColor: $$.fontColor })
+    SearchBar({ fontColor: $$.fontColor })
   }
 
   @Builder

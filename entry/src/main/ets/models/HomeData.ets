@@ -188,6 +188,5 @@ export class RoomRecommendDataSource implements IDataSource {
 }
 
 export interface IColor {
-  bgColor: string
   fontColor: string
 }
