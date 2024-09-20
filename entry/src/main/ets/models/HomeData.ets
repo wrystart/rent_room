@@ -143,3 +143,46 @@ export interface IRoomRecommendItem {
 
 export type IRoomRecommendList = IRoomRecommendItem[]
 
+export class RoomRecommendDataSource implements IDataSource {
+  // 内部用来触发UI更新的对象
+  listeners: DataChangeListener[] = [];
+  roomRecommendList: IRoomRecommendList = [];
+
+  // 实现了 IDataSource 接口，接口要求我们必须定义四个方法getData、totalCount、registerDataChangeListener、unregisterDataChangeListener
+  getData(index: number) {
+    return this.roomRecommendList[index];
+  }
+
+  totalCount() {
+    return this.roomRecommendList.length;
+  }
+
+  setList(list: IRoomRecommendList) {
+    this.roomRecommendList = list;
+    this.notifyDataReload();
+  }
+
+  // 该方法为框架侧调用，为LazyForEach组件向其数据源处添加listener监听
+  registerDataChangeListener(listener: DataChangeListener): void {
+    if (this.listeners.indexOf(listener) < 0) {
+      console.info('add listener');
+      this.listeners.push(listener);
+    }
+  }
+
+  // 该方法为框架侧调用，为对应的LazyForEach组件在数据源处去除listener监听
+  unregisterDataChangeListener(listener: DataChangeListener): void {
+    const pos = this.listeners.indexOf(listener);
+    if (pos >= 0) {
+      console.info('remove listener');
+      this.listeners.splice(pos, 1);
+    }
+  }
+
+  // 通知LazyForEach组件需要重载所有子组件
+  notifyDataReload(): void {
+    this.listeners.forEach(listener => {
+      listener.onDataReloaded();
+    })
+  }
+}

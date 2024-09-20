@@ -1,13 +1,14 @@
-import { getRoomRecommendListApi } from '../../api/home'
-import { BORDER_RADIUS, PADDING, PADDING_S } from '../../contants/size'
-import { IRoomRecommendItem, IRoomRecommendList, ITagItem } from '../../models/HomeData'
+import { getRoomRecommendListApi } from '../../api/home';
+import { BORDER_RADIUS, PADDING, PADDING_S } from '../../contants/size';
+import { IRoomRecommendItem, ITagItem, RoomRecommendDataSource } from '../../models/HomeData';
 
 @Component
 export default struct RoomRecommend {
-  @State roomRecommendList: IRoomRecommendList = []
+  @State roomRecommendList: RoomRecommendDataSource = new RoomRecommendDataSource();
   // 获取房源推荐列表函数
   getRoomRecommendListApi = async () => {
-    this.roomRecommendList = await getRoomRecommendListApi()
+    const roomRecommendList = await getRoomRecommendListApi()
+    this.roomRecommendList.setList(roomRecommendList)
     console.log(JSON.stringify(this.roomRecommendList))
   }
 
@@ -33,7 +34,7 @@ export default struct RoomRecommend {
       .padding({ left: PADDING, right: PADDING, bottom: PADDING_S })
 
       Grid() {
-        ForEach(this.roomRecommendList, (roomRecommend: IRoomRecommendItem) => {
+        LazyForEach(this.roomRecommendList, (roomRecommend: IRoomRecommendItem) => {
           GridItem() {
             Column() {
               Stack() {
