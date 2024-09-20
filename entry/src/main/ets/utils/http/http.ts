@@ -3,7 +3,7 @@ import { promptAction } from '@kit.ArkUI';
 import type { AnyObject } from '../../models/HttpModel';
 
 const request = axios.create({
-  baseURL: 'http://192.168.1.28:6060'
+  baseURL: 'http://192.168.1.183:6060'
 })
 
 request.interceptors.request.use(

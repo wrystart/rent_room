@@ -51,6 +51,10 @@
     {
       "name": "line",
       "value": "#D7D7D7"
+    },
+    {
+      "name": "red_text",
+      "value": "#E03810"
     }
   ]
 }
