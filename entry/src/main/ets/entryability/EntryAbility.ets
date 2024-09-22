@@ -35,6 +35,10 @@ export default class EntryAbility extends UIAbility {
     const topHeight = avoidArea.topRect.height;
     // 将状态栏高度存储起来
     AppStorage.setOrCreate('topHeight', px2vp(topHeight))
+    // 设置状态栏的颜色
+    windowClass.setWindowSystemBarProperties({
+      statusBarContentColor: '#ffffff' // 状态栏内容颜色
+    })
     // const prop = windowClass.getWindowProperties()
     hilog.info(0x0000, 'cnm', JSON.stringify(avoidArea));
   }

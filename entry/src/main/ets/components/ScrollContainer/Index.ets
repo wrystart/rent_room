@@ -1,4 +1,5 @@
 import { IColor } from '../../models/HomeData';
+import { window } from '@kit.ArkUI';
 
 @Component
 export default struct Index {
@@ -9,23 +10,21 @@ export default struct Index {
   scrollY: number = 0;
   @State bgColor: string = 'rgba(0,0,0,0)'
   @State fontColor: string = 'rgba(255,255,255,1)'
-
-  @Builder
-  customBuilder() {
-  }
-
-  // 处理滚动事件
-  handleScroll = (xOffset: number, yOffset: number) => {
-    // 更新滚动距离
-    this.scrollY += yOffset;
-    // 计算颜色
-    this.calcColor()
+  // 获取windowClass并存储，将来使用
+  windowClass?: window.Window
+  getWindowClass = async () => {
+    this.windowClass = await window.getLastWindow(getContext(this))
   }
   calcColor = () => {
+
+
     if (this.scrollY < 10) {
       // 到达顶部，渐变开始
       this.bgColor = 'rgba(255,255,255,0)';
       this.fontColor = 'rgb(255,255,255)';
+      this.windowClass!.setWindowSystemBarProperties({
+        statusBarContentColor: '#ffffff'
+      })
 
     } else if (this.scrollY <= 100) {
       // 渐变中（透明度 0 -> 1）
@@ -37,7 +36,26 @@ export default struct Index {
       // 渐变全部完成
       this.bgColor = 'rgb(255,255,255)';
       this.fontColor = 'rgb(0,0,0)';
+      this.windowClass!.setWindowSystemBarProperties({
+        statusBarContentColor: '#000000'
+      })
     }
+  }
+
+  aboutToAppear() {
+    this.getWindowClass()
+  }
+
+  @Builder
+  customBuilder() {
+  }
+
+  // 处理滚动事件
+  handleScroll = (xOffset: number, yOffset: number) => {
+    // 更新滚动距离
+    this.scrollY += yOffset;
+    // 计算颜色
+    this.calcColor()
   }
 
   build() {
@@ -60,7 +78,7 @@ export default struct Index {
       // 搜索区
       // 按引用传递，传递的参数可为状态变量，且状态变量的改变会引起\@Builder方法内的UI刷新
       Column() {
-        this.navBuilderParam({fontColor: this.fontColor })
+        this.navBuilderParam({ fontColor: this.fontColor })
       }.backgroundColor(this.bgColor).padding({ top: this.topHeight })
     }.width('100%').alignContent(Alignment.TopStart)
   }
