@@ -6,7 +6,7 @@ export default struct SearchBar {
   @Prop fontColor: string;
 
   build() {
-    Row({ space: PADDING }) {
+    Row({ space: rvp(PADDING) }) {
       Text('北京').fontSize(rvp(14)).fontColor(this.fontColor)
       Stack() {
         TextInput()

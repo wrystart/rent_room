@@ -40,8 +40,8 @@ export default struct RoomRecommend {
             Column() {
               Stack() {
                 Image(roomRecommend.housePicture).width('100%').height('100%').objectFit(ImageFit.Fill).borderRadius({
-                  topLeft: BORDER_RADIUS,
-                  topRight: BORDER_RADIUS
+                  topLeft: rvp(BORDER_RADIUS),
+                  topRight: rvp(BORDER_RADIUS)
                 })
                 Image($r('app.media.room_text_bg'))
                   .width('100%')

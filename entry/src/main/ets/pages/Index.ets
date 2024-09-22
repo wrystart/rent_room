@@ -10,6 +10,7 @@ import rvp from '../utils/responsive/Index'
 @Entry
 @Component
 struct Index {
+  @StorageProp('bottomHeight') bottomHeight: number = 0;
   // 当前 tab 高亮的下标
   @State currentTabBarIndex: number = 0;
 
@@ -46,7 +47,7 @@ struct Index {
         My()
       }.tabBar(this.tabBarBuilder($r('app.media.tabbar_my'), $r('app.media.tabbar_my_active'), '我的', 4))
     }
-    .barHeight(rvp(50)) // 设置 tab 导航栏的高度，默认 56
+    .barHeight(rvp(50) + this.bottomHeight) // 设置 tab 导航栏的高度，默认 56
     .scrollable(false) // 静止滚动切换tab
     .onChange((index: number) => {
       this.currentTabBarIndex = index;

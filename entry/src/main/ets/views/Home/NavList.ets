@@ -9,7 +9,7 @@ export default struct NavList {
     Grid() {
       ForEach(this.navList, (nav: INavItem) => {
         GridItem() {
-          Column({ space: 8 }) {
+          Column({ space: rvp(8) }) {
             Image(nav.imageURL).width(rvp(58)).height(rvp(56)).objectFit(ImageFit.Fill)
             Text(nav.title).fontSize(rvp(12)).fontColor($r('app.color.black'))
           }

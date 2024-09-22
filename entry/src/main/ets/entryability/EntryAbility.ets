@@ -33,8 +33,11 @@ export default class EntryAbility extends UIAbility {
     const avoidArea = windowClass.getWindowAvoidArea(window.AvoidAreaType.TYPE_SYSTEM)
     // 注意：单位是px
     const topHeight = avoidArea.topRect.height;
+    const bottomHeight = avoidArea.bottomRect.height;
+
     // 将状态栏高度存储起来
     AppStorage.setOrCreate('topHeight', px2vp(topHeight))
+    AppStorage.setOrCreate('bottomHeight', px2vp(bottomHeight))
     // 设置状态栏的颜色
     windowClass.setWindowSystemBarProperties({
       statusBarContentColor: '#ffffff' // 状态栏内容颜色
