@@ -9,6 +9,7 @@ import { PADDING, SHADOW_RADIUS } from '../contants/size';
 import PlanList from '../views/Home/PlanList';
 import RoomRecommend from '../views/Home/RoomRecommend';
 import ScrollContainer from '../components/ScrollContainer/Index';
+import rvp from '../utils/responsive/Index';
 
 @Component
 export default struct Home {
@@ -83,18 +84,18 @@ export default struct Home {
       // 广告
       Image(this.adPicture)
         .width('100%')
-        .height(60)
+        .height(rvp(60))
         .objectFit(ImageFit.Fill)
-        .margin({ top: 10 })
+        .margin({ top: rvp(10) })
         .shadow({
           offsetX: 0,
           offsetY: 0,
-          radius: SHADOW_RADIUS,
+          radius: rvp(SHADOW_RADIUS),
           color: 'rgba(0, 0, 0, 0.14)'
         })
 
     }
-    .width('100%').padding({ left: PADDING, right: PADDING })
+    .width('100%').padding({ left: rvp(PADDING), right: rvp(PADDING) })
 
     // 房源推荐
     RoomRecommend()

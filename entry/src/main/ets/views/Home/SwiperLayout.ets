@@ -1,4 +1,5 @@
 import { BannerListDataSource, IBannerItem } from '../../models/HomeData';
+import rvp from '../../utils/responsive/Index';
 
 @Component
 export default struct SwiperLayout {
@@ -12,7 +13,7 @@ export default struct SwiperLayout {
       }, (banner: IBannerItem) => banner.id + '')
     }
     .width('100%')
-    .height(211 - 36 + this.topHeight) // 暂时减去状态栏高度
+    .height(rvp(211 - 36) + this.topHeight) // 暂时减去状态栏高度
     .autoPlay(true) // 自动轮播
     .interval(3000) // 设置轮播图切换时长
     .indicator( // 设置圆点导航点样式

@@ -1,4 +1,5 @@
 import { PADDING, PADDING_S } from '../../contants/size';
+import rvp from '../../utils/responsive/Index';
 
 @Component
 export default struct SearchBar {
@@ -6,7 +7,7 @@ export default struct SearchBar {
 
   build() {
     Row({ space: PADDING }) {
-      Text('北京').fontSize(14).fontColor(this.fontColor)
+      Text('北京').fontSize(rvp(14)).fontColor(this.fontColor)
       Stack() {
         TextInput()
           .width('100%')
@@ -14,31 +15,31 @@ export default struct SearchBar {
           .backgroundColor($r('app.color.white'))
           .border({ width: 1, color: $r('app.color.gray') })
         Row() {
-          Image($r('app.media.search')).width(18).height(18)
-          Text('公司/地铁/小区，马上搜索').fontSize(10).fontColor($r('app.color.gray')).layoutWeight(1).margin({
-            left: PADDING_S,
-            right: PADDING_S
+          Image($r('app.media.search')).width(rvp(18)).height(rvp(18))
+          Text('公司/地铁/小区，马上搜索').fontSize(rvp(10)).fontColor($r('app.color.gray')).layoutWeight(1).margin({
+            left: rvp(PADDING_S),
+            right: rvp(PADDING_S)
           })
           Column() {
 
-          }.width(1).height(18).backgroundColor($r('app.color.line')).margin({ right: PADDING })
+          }.width(1).height(rvp(18)).backgroundColor($r('app.color.line')).margin({ right: rvp(PADDING) })
 
-          Image($r('app.media.position')).width(18).height(18)
+          Image($r('app.media.position')).width(rvp(18)).height(rvp(18))
         }.width('100%').padding({
-          left: PADDING,
-          right: PADDING
+          left: rvp(PADDING),
+          right: rvp(PADDING)
         })
-      }.width(244)
+      }.width(rvp(244))
 
-      Image($r('app.media.message')).width(24).height(24).fillColor(this.fontColor)
+      Image($r('app.media.message')).width(rvp(24)).height(rvp(24)).fillColor(this.fontColor)
     }
     .width('100%')
-    .height(38)
+    .height(rvp(38))
     .padding({
-      left: PADDING,
-      right: PADDING,
-      top: 4,
-      bottom: 4
+      left: rvp(PADDING),
+      right: rvp(PADDING),
+      top: rvp(4),
+      bottom: rvp(4)
     })
 
   }

@@ -4,6 +4,8 @@ import Service from './Service'
 import Discover from './Discover'
 import My from './My'
 
+import rvp from '../utils/responsive/Index'
+
 
 @Entry
 @Component
@@ -15,9 +17,9 @@ struct Index {
   @Builder
   tabBarBuilder(image: Resource, activeImage: Resource, text: string, index: number) {
     Column() {
-      Image(this.currentTabBarIndex === index ? activeImage : image).width(28).height(28)
+      Image(this.currentTabBarIndex === index ? activeImage : image).width(rvp(28)).height(rvp(28))
       Text(text)
-        .fontSize(10)
+        .fontSize(rvp(10))
         .fontColor(this.currentTabBarIndex === index ? $r('app.color.black') : $r('app.color.gray_text'))
     }
   }
@@ -44,7 +46,7 @@ struct Index {
         My()
       }.tabBar(this.tabBarBuilder($r('app.media.tabbar_my'), $r('app.media.tabbar_my_active'), '我的', 4))
     }
-    .barHeight(50) // 设置 tab 导航栏的高度，默认 56
+    .barHeight(rvp(50)) // 设置 tab 导航栏的高度，默认 56
     .scrollable(false) // 静止滚动切换tab
     .onChange((index: number) => {
       this.currentTabBarIndex = index;
