@@ -1,4 +1,4 @@
-import { PADDING, PADDING_S } from '../../contants/size';
+import { PADDING, PADDING_S } from '../../constants/size';
 import rvp from '../../utils/responsive/Index';
 
 @Component

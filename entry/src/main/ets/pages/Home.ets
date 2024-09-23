@@ -5,7 +5,7 @@ import SearchBar from '../views/Home/SearchBar';
 import NavList from '../views/Home/NavList';
 import TileList from '../views/Home/TileList';
 
-import { PADDING, SHADOW_RADIUS } from '../contants/size';
+import { PADDING, SHADOW_RADIUS } from '../constants/size';
 import PlanList from '../views/Home/PlanList';
 import RoomRecommend from '../views/Home/RoomRecommend';
 import ScrollContainer from '../components/ScrollContainer/Index';

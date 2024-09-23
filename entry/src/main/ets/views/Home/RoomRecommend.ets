@@ -1,5 +1,5 @@
 import { getRoomRecommendListApi } from '../../api/home';
-import { BORDER_RADIUS, PADDING, PADDING_S } from '../../contants/size';
+import { BORDER_RADIUS, PADDING, PADDING_S } from '../../constants/size';
 import { IRoomRecommendItem, ITagItem, RoomRecommendDataSource } from '../../models/HomeData';
 import rvp from '../../utils/responsive/Index';
 
