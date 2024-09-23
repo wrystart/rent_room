@@ -12,7 +12,7 @@ import rvp from '../utils/responsive/Index'
 struct Index {
   @StorageProp('bottomHeight') bottomHeight: number = 0;
   // 当前 tab 高亮的下标
-  @State currentTabBarIndex: number = 0;
+  @State currentTabBarIndex: number = 1;
 
   // 生成 tab 的函数
   @Builder
@@ -26,7 +26,7 @@ struct Index {
   }
 
   build() {
-    Tabs({ barPosition: BarPosition.End }) {
+    Tabs({ barPosition: BarPosition.End, index: this.currentTabBarIndex }) {
       TabContent() {
         Home()
       }.tabBar(this.tabBarBuilder($r('app.media.tabbar_home'), $r('app.media.tabbar_home_active'), '首页', 0))
