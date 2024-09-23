@@ -1,9 +1,10 @@
-import { BORDER_RADIUS } from '../../constants/size'
-import rvp from '../../utils/responsive/Index'
+import { BORDER_RADIUS } from '../../constants/size';
+import rvp from '../../utils/responsive/Index';
 
 @Component
 export default struct Index {
   @BuilderParam contentBuilderParam: () => void = this.customBuilder
+  @Prop cardPadding: number = 8;
 
   @Builder
   customBuilder() {
@@ -16,7 +17,7 @@ export default struct Index {
 
     }
     .width('100%')
-    .padding(rvp(8))
+    .padding(this.cardPadding)
     .borderRadius(rvp(BORDER_RADIUS))
     .backgroundColor($r('app.color.white'))
 
