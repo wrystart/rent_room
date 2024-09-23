@@ -5,9 +5,23 @@ import Bg from '../views/Service/Bg'
 import NavBar from '../views/Service/NavBar'
 import VIP from '../views/Service/VIP'
 import DomesticService from '../views/Service/DomesticService'
+import { getServiceDataApi } from '../api/service'
+import { IVipServiceList } from '../models/ServiceData'
 
 @Component
 export default struct Service {
+  @State vipServiceList: IVipServiceList = []
+  // 获取服务页数据
+  getServiceData = async () => {
+    const serviceData = await getServiceDataApi()
+    this.vipServiceList = serviceData.vipServiceList
+
+  }
+
+  aboutToAppear(): void {
+    this.getServiceData()
+  }
+
   @Builder
   navBuilder() {
     NavBar()
@@ -19,7 +33,7 @@ export default struct Service {
     Stack() {
       Bg()
       Column() {
-        VIP()
+        VIP({ vipServiceList: this.vipServiceList })
         DomesticService()
       }.width('100%').padding({
         left: rvp(PADDING),
