@@ -13,7 +13,7 @@ import { window } from '@kit.ArkUI'
 struct Index {
   @StorageProp('bottomHeight') bottomHeight: number = 0;
   // 当前 tab 高亮的下标
-  @State currentTabBarIndex: number = 1;
+  @State currentTabBarIndex: number = 2;
   setNavBarColor = async (color: string) => {
     const windowClass = await window.getLastWindow(getContext(this))
     windowClass.setWindowSystemBarProperties({

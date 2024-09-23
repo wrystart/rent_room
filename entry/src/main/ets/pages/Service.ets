@@ -1,10 +1,26 @@
+import ScrollContainer from '../components/ScrollContainer/Index'
+import Bg from '../views/Service/Bg'
+
 @Component
-export default struct Service{
+export default struct Service {
+  @Builder
+  navBuilder() {
+
+  }
+
+  @Builder
+  contentBuilder() {
+    Stack(){
+        Bg()
+    }.width('100%')
+  }
+
   build() {
-    Column(){
-      Text('Service')
-    }
-    .width('100%')
-    .height('100%')
+    ScrollContainer({
+      navBuilderParam: this.navBuilder,
+      contentBuilderParam: () => {
+        this.contentBuilder()
+      }
+    })
   }
 }
