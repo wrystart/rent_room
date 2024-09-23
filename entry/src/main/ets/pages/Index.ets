@@ -5,6 +5,7 @@ import Discover from './Discover'
 import My from './My'
 
 import rvp from '../utils/responsive/Index'
+import { window } from '@kit.ArkUI'
 
 
 @Entry
@@ -13,6 +14,12 @@ struct Index {
   @StorageProp('bottomHeight') bottomHeight: number = 0;
   // 当前 tab 高亮的下标
   @State currentTabBarIndex: number = 1;
+  setNavBarColor = async (color: string) => {
+    const windowClass = await window.getLastWindow(getContext(this))
+    windowClass.setWindowSystemBarProperties({
+      statusBarContentColor: color
+    })
+  }
 
   // 生成 tab 的函数
   @Builder
@@ -51,6 +58,11 @@ struct Index {
     .scrollable(false) // 静止滚动切换tab
     .onChange((index: number) => {
       this.currentTabBarIndex = index;
+      if (index === 1) {
+        this.setNavBarColor('#000000')
+      } else {
+        this.setNavBarColor('#FFFFFF')
+      }
     })
 
   }

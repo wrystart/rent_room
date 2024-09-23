@@ -1,8 +1,12 @@
+import NavBar from '../views/See/NavBar'
+import { window } from '@kit.ArkUI'
+
 @Component
 export default struct See {
+
   build() {
     Column() {
-      Text('See')
+      NavBar()
     }
     .width('100%')
     .height('100%')
