@@ -1,6 +1,9 @@
 import ScrollContainer from '../components/ScrollContainer/Index'
+import { PADDING } from '../constants/size'
+import rvp from '../utils/responsive/Index'
 import Bg from '../views/Service/Bg'
 import NavBar from '../views/Service/NavBar'
+import VIP from '../views/Service/VIP'
 
 @Component
 export default struct Service {
@@ -14,7 +17,13 @@ export default struct Service {
   contentBuilder() {
     Stack() {
       Bg()
-    }.width('100%')
+      Column() {
+        VIP()
+      }.width('100%').padding({
+        left: rvp(PADDING),
+        right: rvp(PADDING)
+      })
+    }.width('100%').alignContent(Alignment.TopStart).backgroundColor($r('app.color.bg_gray_second'))
   }
 
   build() {
