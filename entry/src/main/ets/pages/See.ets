@@ -1,12 +1,12 @@
 import NavBar from '../views/See/NavBar'
-import { window } from '@kit.ArkUI'
+import FindRoom from '../views/See/FindRoom'
 
 @Component
 export default struct See {
-
   build() {
     Column() {
       NavBar()
+      FindRoom()
     }
     .width('100%')
     .height('100%')
