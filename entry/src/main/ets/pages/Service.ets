@@ -4,6 +4,7 @@ import rvp from '../utils/responsive/Index'
 import Bg from '../views/Service/Bg'
 import NavBar from '../views/Service/NavBar'
 import VIP from '../views/Service/VIP'
+import DomesticService from '../views/Service/DomesticService'
 
 @Component
 export default struct Service {
@@ -19,6 +20,7 @@ export default struct Service {
       Bg()
       Column() {
         VIP()
+        DomesticService()
       }.width('100%').padding({
         left: rvp(PADDING),
         right: rvp(PADDING)
