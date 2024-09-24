@@ -13,7 +13,7 @@ import ServiceCalendar from '../views/Service/ServiceCalendar'
 export default struct Service {
   @State vipServiceList: IVipServiceList = []
   @State homeServiceList: IHomeServiceList = []
-  @State serviceCalendar: IServiceActivity = {
+  @State serviceActivity: IServiceActivity = {
     "name": '',
     "img": '',
     "title": '',
@@ -24,7 +24,7 @@ export default struct Service {
     const serviceData = await getServiceDataApi()
     this.vipServiceList = serviceData.vipServiceList
     this.homeServiceList = serviceData.homeServiceList
-    this.serviceCalendar = serviceData.serviceActivity
+    this.serviceActivity = serviceData.serviceActivity
   }
 
   aboutToAppear(): void {
@@ -44,7 +44,7 @@ export default struct Service {
       Column() {
         VIP({ vipServiceList: this.vipServiceList })
         DomesticService({ homeServiceList: this.homeServiceList })
-        ServiceCalendar({ serviceCalendar: this.serviceCalendar })
+        ServiceCalendar({ serviceActivity: this.serviceActivity })
       }.width('100%').padding({
         left: rvp(PADDING),
         right: rvp(PADDING)
