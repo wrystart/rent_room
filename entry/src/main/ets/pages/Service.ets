@@ -6,8 +6,9 @@ import NavBar from '../views/Service/NavBar'
 import VIP from '../views/Service/VIP'
 import DomesticService from '../views/Service/DomesticService'
 import { getServiceDataApi } from '../api/service'
-import { IHomeServiceList, IServiceActivity, IVipServiceList } from '../models/ServiceData'
+import { ICleaningServiceInfoList, IHomeServiceList, IServiceActivity, IVipServiceList } from '../models/ServiceData'
 import ServiceCalendar from '../views/Service/ServiceCalendar'
+import ServiceClean from '../views/Service/ServiceClean'
 
 @Component
 export default struct Service {
@@ -19,12 +20,17 @@ export default struct Service {
     "title": '',
     "subTitle": ''
   }
+  @State newcomerZoneImg: string = ''
+  @State cleaningServiceInfo: ICleaningServiceInfoList = []
   // 获取服务页数据
   getServiceData = async () => {
     const serviceData = await getServiceDataApi()
     this.vipServiceList = serviceData.vipServiceList
     this.homeServiceList = serviceData.homeServiceList
     this.serviceActivity = serviceData.serviceActivity
+    this.newcomerZoneImg = serviceData.newcomerZone.img
+    this.cleaningServiceInfo = serviceData.cleaningServiceInfo
+
   }
 
   aboutToAppear(): void {
@@ -45,6 +51,10 @@ export default struct Service {
         VIP({ vipServiceList: this.vipServiceList })
         DomesticService({ homeServiceList: this.homeServiceList })
         ServiceCalendar({ serviceActivity: this.serviceActivity })
+        ServiceClean({
+          newcomerZoneImg: this.newcomerZoneImg,
+          cleaningServiceInfo: this.cleaningServiceInfo
+        })
       }.width('100%').padding({
         left: rvp(PADDING),
         right: rvp(PADDING)

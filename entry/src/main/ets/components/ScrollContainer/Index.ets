@@ -80,6 +80,6 @@ export default struct Index {
       Column() {
         this.navBuilderParam({ fontColor: this.fontColor })
       }.backgroundColor(this.bgColor).padding({ top: this.topHeight })
-    }.width('100%').alignContent(Alignment.TopStart)
+    }.width('100%').alignContent(Alignment.TopStart).height('100%')
   }
 }

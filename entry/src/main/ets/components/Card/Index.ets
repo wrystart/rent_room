@@ -20,6 +20,6 @@ export default struct Index {
     .padding(this.cardPadding)
     .borderRadius(rvp(BORDER_RADIUS))
     .backgroundColor($r('app.color.white'))
-
+    .alignItems(HorizontalAlign.Start)
   }
 }
