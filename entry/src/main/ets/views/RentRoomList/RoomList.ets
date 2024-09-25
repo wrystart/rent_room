@@ -6,8 +6,6 @@ import rvp from '../../utils/responsive/Index'
 
 @Component
 export default struct RoomList {
-  @StorageProp('windowHeight') windowHeight: number = 780 // 给默认值780，是预览器的高度
-  @StorageProp('topHeight') topHeight: number = 0
   @State roomList: RoomDataSource = new RoomDataSource()
   @State total: number = 0
   @State isEnd: boolean = false
@@ -168,11 +166,11 @@ export default struct RoomList {
       }, (room: IRoomItem) => room.id)
     }
     .width('100%')
-    .height(this.windowHeight - this.topHeight - rvp(88))
+    .height('100%')
     .columnsTemplate('1fr 1fr')
     .columnsGap(rvp(8))
     .rowsGap(rvp(8))
-    .padding({ left: rvp(PADDING), right: rvp(PADDING) })
+    .padding({ left: rvp(PADDING), right: rvp(PADDING), top: rvp(88) })
     .backgroundColor($r('app.color.bg_gray'))
     // 滚动到底部时触发（上拉加载）
     .onReachEnd(this.loadMore)

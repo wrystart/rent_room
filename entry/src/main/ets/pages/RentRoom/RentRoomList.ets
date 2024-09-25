@@ -9,15 +9,16 @@ struct RentRoomList {
   @StorageProp('topHeight') topHeight: number = 0;
 
   build() {
-    Column() {
-      NavBar({ title: '房源推荐' })
-      SearchFilter()
+    Stack() {
       RoomList()
-
+      SearchFilter()
+      Row() {
+        NavBar({ title: '房源推荐' })
+      }.width('100%').backgroundColor($r('app.color.white'))
     }
     .height('100%')
     .width('100%')
     .padding({ top: this.topHeight })
-
+    .alignContent(Alignment.TopStart)
   }
 }
