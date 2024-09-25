@@ -1,5 +1,6 @@
 import { PADDING, PADDING_S } from '../../constants/size';
 import rvp from '../../utils/responsive/Index';
+import { router } from '@kit.ArkUI';
 
 @Component
 export default struct SearchBar {
@@ -8,6 +9,7 @@ export default struct SearchBar {
   build() {
     Row({ space: rvp(PADDING) }) {
       Text('北京').fontSize(rvp(14)).fontColor(this.fontColor)
+
       Stack() {
         TextInput()
           .width('100%')
@@ -29,7 +31,11 @@ export default struct SearchBar {
           left: rvp(PADDING),
           right: rvp(PADDING)
         })
-      }.width(rvp(244))
+      }.width(rvp(244)).onClick(() => {
+        router.pushUrl({
+          url: 'pages/RentRoom/RentRoomList'
+        })
+      })
 
       Image($r('app.media.message')).width(rvp(24)).height(rvp(24)).fillColor(this.fontColor)
     }

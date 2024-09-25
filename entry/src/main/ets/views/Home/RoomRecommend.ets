@@ -2,6 +2,7 @@ import { getRoomRecommendListApi } from '../../api/home';
 import { BORDER_RADIUS, PADDING, PADDING_S } from '../../constants/size';
 import { IRoomRecommendItem, ITagItem, RoomRecommendDataSource } from '../../models/HomeData';
 import rvp from '../../utils/responsive/Index';
+import { router } from '@kit.ArkUI';
 
 @Component
 export default struct RoomRecommend {
@@ -29,6 +30,11 @@ export default struct RoomRecommend {
           Text('更多推荐').fontSize(rvp(10)).fontColor($r('app.color.gray_second'))
           Image($r('app.media.arrow_right')).width(rvp(4)).height(rvp(8))
         }
+        .onClick(() => {
+          router.pushUrl({
+            url: 'pages/RentRoom/RentRoomList'
+          })
+        })
       }
       .width('100%')
       .justifyContent(FlexAlign.SpaceBetween)
