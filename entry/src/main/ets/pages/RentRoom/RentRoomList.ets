@@ -1,20 +1,16 @@
+import NavBar from '../../components/NavBar/Index';
+
 @Entry
 @Component
 struct RentRoomList {
-  @State message: string = 'Hello World';
+  @StorageProp('topHeight') topHeight: number = 0;
 
   build() {
-    RelativeContainer() {
-      Text(this.message)
-        .id('RentRoomListHelloWorld')
-        .fontSize(50)
-        .fontWeight(FontWeight.Bold)
-        .alignRules({
-          center: { anchor: '__container__', align: VerticalAlign.Center },
-          middle: { anchor: '__container__', align: HorizontalAlign.Center }
-        })
+    Column() {
+      NavBar({ title: '房源推荐' })
     }
     .height('100%')
     .width('100%')
+    .padding({ top: this.topHeight })
   }
 }
