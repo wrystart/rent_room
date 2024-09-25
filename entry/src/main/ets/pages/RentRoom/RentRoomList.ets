@@ -1,5 +1,6 @@
 import NavBar from '../../components/NavBar/Index';
 import SearchFilter from '../../views/RentRoomList/SearchFilter';
+import RoomList from '../../views/RentRoomList/RoomList';
 
 
 @Entry
@@ -11,6 +12,8 @@ struct RentRoomList {
     Column() {
       NavBar({ title: '房源推荐' })
       SearchFilter()
+      RoomList()
+
     }
     .height('100%')
     .width('100%')

@@ -13,7 +13,7 @@ export default struct SearchFilter {
       }
 
       Row({ space: rvp(6) }) {
-        Text('户型').fontSize(rvp(14)).fontColor('#333333')
+        Text('支付方式').fontSize(rvp(14)).fontColor('#333333')
         Image($r('app.media.arrow_down_3'))
           .width(rvp(6))
           .height(rvp(3))
