@@ -1,7 +1,7 @@
 import { searchRoomListApi } from '../../api/rentRoomList'
 import { BORDER_RADIUS, PADDING, PADDING_S } from '../../constants/size'
 import { ITagItem } from '../../models/HomeData'
-import { IRoomItem, RoomDataSource } from '../../models/RentRoomListData'
+import { IRoomItem, ISearchRoomListParams, RoomDataSource } from '../../models/RentRoomListData'
 import rvp from '../../utils/responsive/Index'
 
 @Component
@@ -10,11 +10,23 @@ export default struct RoomList {
   @StorageProp('topHeight') topHeight: number = 0
   @State roomList: RoomDataSource = new RoomDataSource()
   @State total: number = 0
+  @State isEnd: boolean = false
+  // 搜索条件
+  @State searchOptions: ISearchRoomListParams = {
+    page: 1,
+    limit: 10
+  }
 
   // 搜索数据
   async searchRoomList() {
-    const res = await searchRoomListApi({ page: 1, limit: 10 })
-    this.roomList.setList(res.records)
+    const res = await searchRoomListApi(this.searchOptions)
+    if (this.searchOptions.page === 1) {
+      // 如果当前页码是1，说明相当于第一次请求，用覆盖
+      this.roomList.setList(res.records)
+    } else {
+      // 如果当前页码是2，说明加载后面的数据，用追加
+      this.roomList.pushList(res.records)
+    }
     this.total = Number(res.total)
   }
 
@@ -25,11 +37,35 @@ export default struct RoomList {
   getText(room: IRoomItem): string {
     // Reflect提供了对对象操作的方法:get、set、delete等
     // room.activity 因为属性时可选的，所以使用非空断言
-    return Reflect.get(room.activity!, '#text');
+    return Reflect.get(room.activity!, '#text')
+  }
+
+  loadMore = () => {
+    if (this.roomList.totalCount() >= this.total) {
+      this.isEnd = true
+      return
+    }
+    this.isEnd = false
+    this.searchOptions.page++
+    this.searchRoomList()
+  }
+
+  @Builder
+  footerBuilder() {
+    Row({ space: rvp(10) }) {
+      if (this.isEnd) {
+        Text('到底了，没有更多数据了~').fontSize(rvp(12)).fontColor($r('app.color.gray')).margin({ top: rvp(6) })
+      } else {
+        Refresh({ refreshing: true })
+        Text('加载数据中...').fontSize(rvp(12)).fontColor($r('app.color.gray')).margin({ top: rvp(6) })
+      }
+
+
+    }.width('100%').justifyContent(FlexAlign.Center)
   }
 
   build() {
-    WaterFlow() {
+    WaterFlow({ footer: this.footerBuilder }) {
 
       FlowItem() {
       }.width(rvp(8))
@@ -136,7 +172,15 @@ export default struct RoomList {
     .columnsTemplate('1fr 1fr')
     .columnsGap(rvp(8))
     .rowsGap(rvp(8))
-    .padding({ left: rvp(PADDING), right: rvp(PADDING), bottom: rvp(PADDING) })
+    .padding({ left: rvp(PADDING), right: rvp(PADDING) })
     .backgroundColor($r('app.color.bg_gray'))
+    // 滚动到底部时触发（上拉加载）
+    .onReachEnd(this.loadMore)
+
+    // // （下拉刷新）在这里看不出效果，因为查的数据都是相同的。
+    // .onReachStart(() => {
+    //   this.searchOptions.page = 1
+    //   this.searchRoomList()
+    // })
   }
 }
