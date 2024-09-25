@@ -31,3 +31,63 @@ export interface ISearchRoomListData {
   records: IRoomList
   total: string
 }
+
+export class RoomDataSource implements IDataSource {
+  // 内部用来触发UI更新的对象
+  listeners: DataChangeListener[] = [];
+  roomList: IRoomList = [];
+
+  // 实现了 IDataSource 接口，接口要求我们必须定义四个方法getData、totalCount、registerDataChangeListener、unregisterDataChangeListener
+  getData(index: number) {
+    return this.roomList[index];
+  }
+
+  totalCount() {
+    return this.roomList.length;
+  }
+
+  // 更新整个数据
+  setList(list: IRoomList) {
+    this.roomList = list;
+    this.notifyDataReload();
+  }
+
+  // 追加数据
+  pushList(list: IRoomList) {
+    list.forEach(item => {
+      this.roomList.push(item)
+      this.notifyDataAdd(this.roomList.length - 1)
+    })
+  }
+
+  // 通知LazyForEach组件需要在index对应索引处添加子组件
+  notifyDataAdd(index: number): void {
+    this.listeners.forEach(listener => {
+      listener.onDataAdd(index);
+    })
+  }
+
+  // 该方法为框架侧调用，为LazyForEach组件向其数据源处添加listener监听
+  registerDataChangeListener(listener: DataChangeListener): void {
+    if (this.listeners.indexOf(listener) < 0) {
+      console.info('add listener');
+      this.listeners.push(listener);
+    }
+  }
+
+  // 该方法为框架侧调用，为对应的LazyForEach组件在数据源处去除listener监听
+  unregisterDataChangeListener(listener: DataChangeListener): void {
+    const pos = this.listeners.indexOf(listener);
+    if (pos >= 0) {
+      console.info('remove listener');
+      this.listeners.splice(pos, 1);
+    }
+  }
+
+  // 通知LazyForEach组件需要重载所有子组件
+  notifyDataReload(): void {
+    this.listeners.forEach(listener => {
+      listener.onDataReloaded();
+    })
+  }
+}

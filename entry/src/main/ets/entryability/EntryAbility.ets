@@ -45,8 +45,10 @@ export default class EntryAbility extends UIAbility {
     // 获取屏幕宽度
     const props = windowClass.getWindowProperties()
     const windowWidth = props.windowRect.width; // 注意：单位是px
+    const windowHeight = props.windowRect.height; // 注意：单位是px
     // 将屏幕宽度存储起来
     AppStorage.setOrCreate('windowWidth', px2vp(windowWidth))
+    AppStorage.setOrCreate('windowHeight', px2vp(windowHeight))
     hilog.info(0x0000, 'cnm', JSON.stringify(props));
   }
 
