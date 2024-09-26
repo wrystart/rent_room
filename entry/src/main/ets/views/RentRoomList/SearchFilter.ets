@@ -1,4 +1,6 @@
+import { getCityListApi, getDistrictListApi, getProvinceListApi } from '../../api/rentRoomList'
 import { PADDING } from '../../constants/size'
+import { ICityList, IDistrictList, IProvinceList } from '../../models/RentRoomListData'
 import rvp from '../../utils/responsive/Index'
 
 @Component
@@ -7,7 +9,36 @@ export default struct SearchFilter {
   // 是否显示搜索区域
   @State isShowSearchArea: boolean = false
   // 当前选择的搜索文本
-  @State currentSearchText: string = '';
+  @State @Watch('handleSearchTextChange') currentSearchText: string = '';
+  @State provinceList: IProvinceList = []
+  @State provinceCode: string = ''
+  @State cityList: ICityList = []
+  @State cityCode: string = ''
+  @State districtList: IDistrictList = []
+  @State districtCode: string = ''
+  // 获取区县数据
+  getDistrictList = async () => {
+    this.districtList = await getDistrictListApi(this.cityCode)
+    this.districtCode = this.districtList[0].code
+    console.log(JSON.stringify(this.districtList));
+
+  }
+  // 获取城市数据
+  getCityList = async () => {
+    this.cityList = await getCityListApi(this.provinceCode)
+    this.cityCode = this.cityList[0].code
+    console.log(JSON.stringify(this.cityList));
+    this.getDistrictList()
+  }
+  // 获取省份数据
+  getProvinceList = async () => {
+    this.provinceList = await getProvinceListApi()
+    this.provinceCode = this.provinceList[0].code
+    console.log(JSON.stringify(this.provinceList));
+
+    this.getCityList()
+  }
+
   // 设置显示搜索区域
   showSearchArea = (text: string) => {
     // 点击相同的取反，点击不同的显示
@@ -22,6 +53,13 @@ export default struct SearchFilter {
   hideSearchArea = () => {
     this.isShowSearchArea = false
     this.currentSearchText = ''
+  }
+
+  // 处理搜索文本的变化
+  handleSearchTextChange() {
+    if (this.currentSearchText === '位置') {
+      this.getProvinceList()
+    }
   }
 
   @Builder
