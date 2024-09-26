@@ -6,8 +6,10 @@ import {
   IDistrictItem,
   IDistrictList,
   IProvinceItem,
-  IProvinceList
+  IProvinceList,
+  ISearchRoomListParams
 } from '../../models/RentRoomListData'
+import globalEmitter from '../../utils/emitter'
 import rvp from '../../utils/responsive/Index'
 
 @Component
@@ -25,21 +27,24 @@ export default struct SearchFilter {
   @State districtCode: string = ''
   // 点击查看房源时，才能更新的数据
   @State submitDistrictName: string = ''
+  @State submitProvinceCode: string = ''
+  @State submitCityCode: string = ''
+  @State submitDistrictCode: string = ''
   // 获取区县数据
   getDistrictList = async () => {
     this.districtList = await getDistrictListApi(this.cityCode)
-    this.districtCode = this.districtList[0].code
+    this.districtCode = this.districtCode || this.districtList[0].code
   }
   // 获取城市数据
   getCityList = async () => {
     this.cityList = await getCityListApi(this.provinceCode)
-    this.cityCode = this.cityList[0].code
+    this.cityCode = this.cityCode || this.cityList[0].code
     this.getDistrictList()
   }
   // 获取省份数据
   getProvinceList = async () => {
     this.provinceList = await getProvinceListApi()
-    this.provinceCode = this.provinceList[0].code
+    this.provinceCode = this.provinceCode || this.provinceList[0].code
     this.getCityList()
   }
   // 设置显示搜索区域
@@ -60,7 +65,13 @@ export default struct SearchFilter {
 
   // 处理搜索文本的变化
   handleSearchTextChange() {
+
     if (this.currentSearchText === '位置') {
+      if (this.submitDistrictName) {
+        this.provinceCode = this.submitProvinceCode
+        this.cityCode = this.submitCityCode
+        this.districtCode = this.submitDistrictCode
+      }
       this.getProvinceList()
     }
   }
@@ -68,13 +79,24 @@ export default struct SearchFilter {
   // 重置位置
   resetPosition = () => {
     this.provinceCode = this.provinceList[0].code
+    this.cityCode = ''
+    this.districtCode = ''
     this.getCityList()
   }
   // 位置：查看房源
   submitPosition = () => {
     this.hideSearchArea()
-    // 搜索房源列表
     this.submitDistrictName = this.districtList.find(district => district.code === this.districtCode)!.name
+    this.submitProvinceCode = this.provinceCode
+    this.submitCityCode = this.cityCode
+    this.submitDistrictCode = this.districtCode
+    // 搜索房源列表
+    const searchOptions: Partial<ISearchRoomListParams> = {
+      provinceCode: this.provinceCode,
+      cityCode: this.cityCode,
+      districtCode: this.districtCode
+    }
+    globalEmitter.emit('search', searchOptions)
   }
 
   @Builder
@@ -93,6 +115,8 @@ export default struct SearchFilter {
           .padding({ left: rvp(PADDING), right: rvp(PADDING) })
           .onClick(() => {
             this.provinceCode = province.code
+            this.cityCode = ''
+            this.districtCode = ''
             this.getCityList()
           })
 
@@ -112,6 +136,7 @@ export default struct SearchFilter {
           .padding({ left: rvp(PADDING), right: rvp(PADDING) })
           .onClick(() => {
             this.cityCode = city.code
+            this.districtCode = ''
             this.getDistrictList()
           })
 

@@ -3,11 +3,11 @@ import { IRoomRecommendItem } from './HomeData'
 export interface ISearchRoomListParams {
   page: number
   limit: number
-  provinceCode?: number
-  cityCode?: number
-  districtCode?: number
-  minRent?: number
-  maxRent?: number
+  provinceCode?: string
+  cityCode?: string
+  districtCode?: string
+  minRent?: string
+  maxRent?: string
   paymentType?: string
   orderBy?: string
   orderType?: string

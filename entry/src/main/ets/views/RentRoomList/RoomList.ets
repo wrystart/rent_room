@@ -2,6 +2,7 @@ import { searchRoomListApi } from '../../api/rentRoomList'
 import { BORDER_RADIUS, PADDING, PADDING_S } from '../../constants/size'
 import { ITagItem } from '../../models/HomeData'
 import { IRoomItem, ISearchRoomListParams, RoomDataSource } from '../../models/RentRoomListData'
+import globalEmitter from '../../utils/emitter'
 import rvp from '../../utils/responsive/Index'
 
 @Component
@@ -30,6 +31,19 @@ export default struct RoomList {
 
   aboutToAppear(): void {
     this.searchRoomList()
+    //泛型工具类型：Partial<ISearchRoomListParams>可以快速把某个接口类型中定义的所有属性变成可选的。
+    globalEmitter.on('search', (searchOptions: Partial<ISearchRoomListParams>) => {
+      // 将传递过来的搜索条件（searchOptions），添加到当前组件的搜索条件来（this。searchOptions）
+      const keys = Object.keys(searchOptions)
+      keys.forEach(key => {
+        const val: string = Reflect.get(searchOptions, key)
+        Reflect.set(this.searchOptions, key, val)
+      })
+      // 一旦触发搜索，从第一页开始
+      this.searchOptions.page = 1
+      // 触发搜索
+      this.searchRoomList()
+    })
   }
 
   getText(room: IRoomItem): string {
@@ -53,6 +67,8 @@ export default struct RoomList {
     Row({ space: rvp(10) }) {
       if (this.isEnd) {
         Text('到底了，没有更多数据了~').fontSize(rvp(12)).fontColor($r('app.color.gray')).margin({ top: rvp(6) })
+      } else if (this.roomList.totalCount() === 0) {
+        Text('暂无数据...').fontSize(rvp(12)).fontColor($r('app.color.gray')).margin({ top: rvp(6) })
       } else {
         Refresh({ refreshing: true })
         Text('加载数据中...').fontSize(rvp(12)).fontColor($r('app.color.gray')).margin({ top: rvp(6) })
