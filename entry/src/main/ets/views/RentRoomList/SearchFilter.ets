@@ -27,22 +27,17 @@ export default struct SearchFilter {
   getDistrictList = async () => {
     this.districtList = await getDistrictListApi(this.cityCode)
     this.districtCode = this.districtList[0].code
-    console.log(JSON.stringify(this.districtList));
-
   }
   // 获取城市数据
   getCityList = async () => {
     this.cityList = await getCityListApi(this.provinceCode)
     this.cityCode = this.cityList[0].code
-    console.log(JSON.stringify(this.cityList));
     this.getDistrictList()
   }
   // 获取省份数据
   getProvinceList = async () => {
     this.provinceList = await getProvinceListApi()
     this.provinceCode = this.provinceList[0].code
-    console.log(JSON.stringify(this.provinceList));
-
     this.getCityList()
   }
   // 设置显示搜索区域
@@ -66,6 +61,13 @@ export default struct SearchFilter {
     if (this.currentSearchText === '位置') {
       this.getProvinceList()
     }
+  }
+
+  // 重置位置
+  resetPosition = () => {
+    this.provinceCode = this.provinceList[0].code
+    this.getCityList()
+
   }
 
   @Builder
@@ -137,6 +139,7 @@ export default struct SearchFilter {
         .height(rvp(26))
         .borderRadius(rvp(BORDER_RADIUS_S))
         .backgroundColor('#f0f0f0')
+        .onClick(this.resetPosition)
       Button('查看房源')
         .type(ButtonType.Normal)
         .fontSize(rvp(12))
