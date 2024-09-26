@@ -1,6 +1,13 @@
 import { getCityListApi, getDistrictListApi, getProvinceListApi } from '../../api/rentRoomList'
-import { PADDING } from '../../constants/size'
-import { ICityList, IDistrictList, IProvinceList } from '../../models/RentRoomListData'
+import { BORDER_RADIUS_S, PADDING } from '../../constants/size'
+import {
+  ICityItem,
+  ICityList,
+  IDistrictItem,
+  IDistrictList,
+  IProvinceItem,
+  IProvinceList
+} from '../../models/RentRoomListData'
 import rvp from '../../utils/responsive/Index'
 
 @Component
@@ -38,7 +45,6 @@ export default struct SearchFilter {
 
     this.getCityList()
   }
-
   // 设置显示搜索区域
   showSearchArea = (text: string) => {
     // 点击相同的取反，点击不同的显示
@@ -64,7 +70,82 @@ export default struct SearchFilter {
 
   @Builder
   positionBuilder() {
-    Text('位置')
+    Row() {
+      List() {
+        ForEach(this.provinceList, (province: IProvinceItem) => {
+          ListItem() {
+            Text(province.name)
+              .fontSize(rvp(12))
+              .fontColor(this.provinceCode === province.code ? $r('app.color.primary') : $r('app.color.black'))
+          }
+          .height(rvp(30))
+          .width('100%')
+          .align(Alignment.Start)
+          .padding({ left: rvp(PADDING), right: rvp(PADDING) })
+          .onClick(() => {
+            this.provinceCode = province.code
+            this.getCityList()
+          })
+
+        }, (province: IProvinceItem) => province.code)
+      }.width(rvp(120)).height('100%').backgroundColor($r('app.color.bg_gray')).scrollBar(BarState.Off)
+
+      List() {
+        ForEach(this.cityList, (city: ICityItem) => {
+          ListItem() {
+            Text(city.name)
+              .fontSize(rvp(12))
+              .fontColor(this.cityCode === city.code ? $r('app.color.primary') : $r('app.color.black'))
+          }
+          .height(rvp(30))
+          .width('100%')
+          .align(Alignment.Start)
+          .padding({ left: rvp(PADDING), right: rvp(PADDING) })
+          .onClick(() => {
+            this.cityCode = city.code
+            this.getDistrictList()
+          })
+
+        }, (city: ICityItem) => city.code)
+      }.width(rvp(120)).height('100%').backgroundColor('#ebebeb').scrollBar(BarState.Off)
+
+      List() {
+        ForEach(this.districtList, (district: IDistrictItem) => {
+          ListItem() {
+            Text(district.name)
+              .fontSize(rvp(12))
+              .fontColor(this.districtCode === district.code ? $r('app.color.primary') : $r('app.color.black'))
+          }
+          .height(rvp(30))
+          .width('100%')
+          .align(Alignment.Start)
+          .padding({ left: rvp(PADDING), right: rvp(PADDING) })
+          .onClick(() => {
+            this.districtCode = district.code
+          })
+
+        }, (district: IDistrictItem) => district.code)
+      }.width(rvp(120)).height('100%').backgroundColor('#e6e6e6').scrollBar(BarState.Off)
+    }.height(rvp(240)).width('100%')
+
+    Row({ space: rvp(22) }) {
+      Button('重置')
+        .type(ButtonType.Normal)
+        .fontSize(rvp(12))
+        .fontColor($r('app.color.gray_second'))
+        .width(rvp(95))
+        .height(rvp(26))
+        .borderRadius(rvp(BORDER_RADIUS_S))
+        .backgroundColor('#f0f0f0')
+      Button('查看房源')
+        .type(ButtonType.Normal)
+        .fontSize(rvp(12))
+        .fontColor($r('app.color.white'))
+        .width(rvp(211))
+        .height(rvp(26))
+        .borderRadius(rvp(BORDER_RADIUS_S))
+        .backgroundColor('#67c0a8')
+    }.width('100%').height(rvp(58)).justifyContent(FlexAlign.Center)
   }
 
   @Builder
