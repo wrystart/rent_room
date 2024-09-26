@@ -47,6 +47,10 @@ export default struct SearchFilter {
     this.provinceCode = this.provinceCode || this.provinceList[0].code
     this.getCityList()
   }
+  // 支付方式
+  @State paymentWayList: string[] = ['月付', '季付', '半年付', '年付']
+  @State paymentWay: string = ''
+  @State submitPaymentWayName: string = ''
   // 设置显示搜索区域
   showSearchArea = (text: string) => {
     // 点击相同的取反，点击不同的显示
@@ -65,15 +69,16 @@ export default struct SearchFilter {
 
   // 处理搜索文本的变化
   handleSearchTextChange() {
-
     if (this.currentSearchText === '位置') {
-      if (this.submitDistrictName) {
-        this.provinceCode = this.submitProvinceCode
-        this.cityCode = this.submitCityCode
-        this.districtCode = this.submitDistrictCode
-      }
+      this.provinceCode = this.submitProvinceCode
+      this.cityCode = this.submitCityCode
+      this.districtCode = this.submitDistrictCode
       this.getProvinceList()
+    } else if (this.currentSearchText === '支付方式') {
+      this.paymentWay = this.submitPaymentWayName
     }
+
+
   }
 
   // 重置位置
@@ -184,9 +189,56 @@ export default struct SearchFilter {
     }.width('100%').height(rvp(58)).justifyContent(FlexAlign.Center)
   }
 
+  resetPaymentWay = () => {
+    this.paymentWay = ''
+  }
+  submitPaymentWay = () => {
+    this.submitPaymentWayName = this.paymentWay
+    this.hideSearchArea()
+    const searchOptions: Partial<ISearchRoomListParams> = {
+      paymentType: this.paymentWay
+    }
+    globalEmitter.emit('search', searchOptions)
+  }
+
   @Builder
   paymentWayBuilder() {
-    Text('支付方式')
+    Row() {
+      ForEach(this.paymentWayList, (paymentWay: string) => {
+        Text(paymentWay)
+          .width(rvp(70))
+          .height(rvp(26))
+          .borderRadius(rvp(BORDER_RADIUS_S))
+          .backgroundColor(this.paymentWay === paymentWay ? '#67C0A8' : $r('app.color.bg_gray'))
+          .fontColor(this.paymentWay === paymentWay ? $r('app.color.white') : $r('app.color.gray_second'))
+          .fontSize(rvp(12))
+          .textAlign(TextAlign.Center)
+          .onClick(() => {
+            this.paymentWay = paymentWay
+          })
+      }, (paymentWay: string) => paymentWay)
+    }.width('100%').justifyContent(FlexAlign.SpaceBetween).padding(rvp(PADDING))
+
+    Row({ space: rvp(22) }) {
+      Button('重置')
+        .type(ButtonType.Normal)
+        .fontSize(rvp(12))
+        .fontColor($r('app.color.gray_second'))
+        .width(rvp(95))
+        .height(rvp(26))
+        .borderRadius(rvp(BORDER_RADIUS_S))
+        .backgroundColor('#f0f0f0')
+        .onClick(this.resetPaymentWay)
+      Button('查看房源')
+        .type(ButtonType.Normal)
+        .fontSize(rvp(12))
+        .fontColor($r('app.color.white'))
+        .width(rvp(211))
+        .height(rvp(26))
+        .borderRadius(rvp(BORDER_RADIUS_S))
+        .backgroundColor('#67c0a8')
+        .onClick(this.submitPaymentWay)
+    }.width('100%').height(rvp(58)).justifyContent(FlexAlign.Center)
   }
 
   @Builder
@@ -203,19 +255,20 @@ export default struct SearchFilter {
     if (text === '位置') {
       return this.submitDistrictName || text
     } else if (text === '支付方式') {
-      return text
+      return this.submitPaymentWayName || text
     } else if (text === '租金') {
       return text
     } else if (text === '排序') {
       return text
+    } else {
+      return text
     }
-    return text
   }
   getSearchTextColor = (text: string) => {
     if (text === '位置') {
       return this.submitDistrictName ? $r('app.color.primary') : '#333333'
     } else if (text === '支付方式') {
-      return text
+      return this.submitPaymentWayName ? $r('app.color.primary') : '#333333'
     } else if (text === '租金') {
       return text
     } else if (text === '排序') {
