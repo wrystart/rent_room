@@ -7,6 +7,8 @@ import {
   IDistrictList,
   IProvinceItem,
   IProvinceList,
+  IRentPriceItem,
+  IRentPriceList,
   ISearchRoomListParams
 } from '../../models/RentRoomListData'
 import globalEmitter from '../../utils/emitter'
@@ -51,6 +53,63 @@ export default struct SearchFilter {
   @State paymentWayList: string[] = ['月付', '季付', '半年付', '年付']
   @State paymentWay: string = ''
   @State submitPaymentWayName: string = ''
+  // 租金
+  @State rentPriceList: IRentPriceList = [{
+    id: 1,
+    minRent: '0',
+    maxRent: '0',
+    text: '不限'
+  },
+    {
+      id: 2,
+      minRent: '0',
+      maxRent: '1500',
+      text: '1500元以下'
+    },
+    {
+      id: 3,
+      minRent: '1500',
+      maxRent: '2500',
+      text: '1500-2500元'
+    },
+    {
+      id: 4,
+      minRent: '2500',
+      maxRent: '3500',
+      text: '2500-3500元'
+    },
+    {
+      id: 5,
+      minRent: '3500',
+      maxRent: '4500',
+      text: '3500-4500元'
+    },
+    {
+      id: 6,
+      minRent: '4500',
+      maxRent: '6000',
+      text: '4500-6000元'
+    },
+    {
+      id: 7,
+      minRent: '6000',
+      maxRent: '8000',
+      text: '6000-8000元'
+    },
+    {
+      id: 8,
+      minRent: '8000',
+      maxRent: '10000',
+      text: '8000-10000元'
+    },
+    {
+      id: 9,
+      minRent: '10000',
+      maxRent: '0',
+      text: '10000元以上'
+    }]
+  @State rentText: string = ''
+  @State submitRentPriceText: string = ''
   // 设置显示搜索区域
   showSearchArea = (text: string) => {
     // 点击相同的取反，点击不同的显示
@@ -76,8 +135,9 @@ export default struct SearchFilter {
       this.getProvinceList()
     } else if (this.currentSearchText === '支付方式') {
       this.paymentWay = this.submitPaymentWayName
+    } else if (this.currentSearchText === '租金') {
+      this.rentText = this.submitRentPriceText
     }
-
 
   }
 
@@ -206,13 +266,7 @@ export default struct SearchFilter {
     Row() {
       ForEach(this.paymentWayList, (paymentWay: string) => {
         Text(paymentWay)
-          .width(rvp(70))
-          .height(rvp(26))
-          .borderRadius(rvp(BORDER_RADIUS_S))
-          .backgroundColor(this.paymentWay === paymentWay ? '#67C0A8' : $r('app.color.bg_gray'))
-          .fontColor(this.paymentWay === paymentWay ? $r('app.color.white') : $r('app.color.gray_second'))
-          .fontSize(rvp(12))
-          .textAlign(TextAlign.Center)
+          .textExtends(this.paymentWay === paymentWay, 70)
           .onClick(() => {
             this.paymentWay = paymentWay
           })
@@ -241,9 +295,63 @@ export default struct SearchFilter {
     }.width('100%').height(rvp(58)).justifyContent(FlexAlign.Center)
   }
 
+  resetRentPrice = () => {
+    this.rentText = ''
+  }
+  submitRentPrice = () => {
+    //更新数据
+    this.submitRentPriceText = this.rentText
+    //触发搜索
+    const rent = this.rentPriceList.find(rent => rent.text === this.rentText)
+    const searchOptions: Partial<ISearchRoomListParams> = {
+      minRent: rent?.minRent,
+      maxRent: rent?.maxRent
+    }
+    globalEmitter.emit('search', searchOptions)
+    // 隐藏
+    this.hideSearchArea()
+
+  }
+
   @Builder
   rentPriceBuilder() {
-    Text('租金')
+    Grid() {
+      ForEach(this.rentPriceList, (rentPrice: IRentPriceItem) => {
+        GridItem() {
+          Text(rentPrice.text)
+            .textExtends(this.rentText === rentPrice.text, 94)
+            .onClick(() => {
+              this.rentText = rentPrice.text
+            })
+        }
+      }, (rentPrice: IRentPriceItem) => rentPrice.id + '')
+    }
+    .width('100%')
+    .columnsTemplate('1fr 1fr 1fr')
+    .padding(rvp(PADDING))
+    .rowsGap(rvp(8))
+    .height(rvp(120))
+
+    Row({ space: rvp(22) }) {
+      Button('重置')
+        .type(ButtonType.Normal)
+        .fontSize(rvp(12))
+        .fontColor($r('app.color.gray_second'))
+        .width(rvp(95))
+        .height(rvp(26))
+        .borderRadius(rvp(BORDER_RADIUS_S))
+        .backgroundColor('#f0f0f0')
+        .onClick(this.resetRentPrice)
+      Button('查看房源')
+        .type(ButtonType.Normal)
+        .fontSize(rvp(12))
+        .fontColor($r('app.color.white'))
+        .width(rvp(211))
+        .height(rvp(26))
+        .borderRadius(rvp(BORDER_RADIUS_S))
+        .backgroundColor('#67c0a8')
+        .onClick(this.submitRentPrice)
+    }.width('100%').height(rvp(58)).justifyContent(FlexAlign.Center)
   }
 
   @Builder
@@ -257,7 +365,7 @@ export default struct SearchFilter {
     } else if (text === '支付方式') {
       return this.submitPaymentWayName || text
     } else if (text === '租金') {
-      return text
+      return this.submitRentPriceText || text
     } else if (text === '排序') {
       return text
     } else {
@@ -270,7 +378,7 @@ export default struct SearchFilter {
     } else if (text === '支付方式') {
       return this.submitPaymentWayName ? $r('app.color.primary') : '#333333'
     } else if (text === '租金') {
-      return text
+      return this.submitRentPriceText ? $r('app.color.primary') : '#333333'
     } else if (text === '排序') {
       return text
     }
@@ -330,4 +438,15 @@ export default struct SearchFilter {
     }.width('100%').height(this.isShowSearchArea ? '100%' : rvp(88)).padding({ top: rvp(44) })
 
   }
+}
+
+@Extend(Text)
+function textExtends(isActive: boolean, width: number) {
+  .width(rvp(width))
+  .height(rvp(26))
+  .borderRadius(rvp(BORDER_RADIUS_S))
+  .backgroundColor(isActive ? '#67C0A8' : $r('app.color.bg_gray'))
+  .fontColor(isActive ? $r('app.color.white') : $r('app.color.gray_second'))
+  .fontSize(rvp(12))
+  .textAlign(TextAlign.Center)
 }
