@@ -23,6 +23,8 @@ export default struct SearchFilter {
   @State cityCode: string = ''
   @State districtList: IDistrictList = []
   @State districtCode: string = ''
+  // 点击查看房源时，才能更新的数据
+  @State submitDistrictName: string = ''
   // 获取区县数据
   getDistrictList = async () => {
     this.districtList = await getDistrictListApi(this.cityCode)
@@ -67,7 +69,12 @@ export default struct SearchFilter {
   resetPosition = () => {
     this.provinceCode = this.provinceList[0].code
     this.getCityList()
-
+  }
+  // 位置：查看房源
+  submitPosition = () => {
+    this.hideSearchArea()
+    // 搜索房源列表
+    this.submitDistrictName = this.districtList.find(district => district.code === this.districtCode)!.name
   }
 
   @Builder
@@ -148,6 +155,7 @@ export default struct SearchFilter {
         .height(rvp(26))
         .borderRadius(rvp(BORDER_RADIUS_S))
         .backgroundColor('#67c0a8')
+        .onClick(this.submitPosition)
     }.width('100%').height(rvp(58)).justifyContent(FlexAlign.Center)
   }
 
@@ -166,13 +174,45 @@ export default struct SearchFilter {
     Text('排序')
   }
 
+  getSearchText = (text: string) => {
+    if (text === '位置') {
+      return this.submitDistrictName || text
+    } else if (text === '支付方式') {
+      return text
+    } else if (text === '租金') {
+      return text
+    } else if (text === '排序') {
+      return text
+    }
+    return text
+  }
+  getSearchTextColor = (text: string) => {
+    if (text === '位置') {
+      return this.submitDistrictName ? $r('app.color.primary') : '#333333'
+    } else if (text === '支付方式') {
+      return text
+    } else if (text === '租金') {
+      return text
+    } else if (text === '排序') {
+      return text
+    }
+    return text
+  }
+
   build() {
     Column() {
       // 四个搜索文字
       Row() {
         ForEach(this.searchTextList, (text: string) => {
           Row({ space: rvp(6) }) {
-            Text(text).fontSize(rvp(14)).fontColor('#333333')
+            Text(this.getSearchText(text))
+              .fontSize(rvp(14))
+              .fontColor(this.getSearchTextColor(text))
+              .constraintSize({
+                maxWidth: rvp(56)
+              })
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
             Image(this.currentSearchText === text ? $r('app.media.arrow_down_3_active') : $r('app.media.arrow_down_3'))
               .width(this.currentSearchText === text ? rvp(12) : rvp(6))
               .height(this.currentSearchText === text ? rvp(6) : rvp(3))
