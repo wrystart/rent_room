@@ -4,6 +4,7 @@ import { ITagItem } from '../../models/HomeData'
 import { IRoomItem, ISearchRoomListParams, RoomDataSource } from '../../models/RentRoomListData'
 import globalEmitter from '../../utils/emitter'
 import rvp from '../../utils/responsive/Index'
+import { router } from '@kit.ArkUI'
 
 @Component
 export default struct RoomList {
@@ -178,7 +179,14 @@ export default struct RoomList {
             }.width('100%').padding(rvp(PADDING_S)).alignItems(HorizontalAlign.Start)
 
           }.width('100%').height('100%').borderRadius(rvp(BORDER_RADIUS)).backgroundColor($r('app.color.white'))
-        }.width(rvp(160)).height(room.activity ? rvp(320) : rvp(210))
+        }.width(rvp(160)).height(room.activity ? rvp(320) : rvp(210)).onClick(() => {
+          router.pushUrl({
+            url: 'pages/RentRoom/RentRoomDetail',
+            params: {
+              id: room.id
+            }
+          })
+        })
       }, (room: IRoomItem) => room.id)
     }
     .width('100%')
