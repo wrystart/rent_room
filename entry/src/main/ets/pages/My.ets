@@ -1,10 +1,14 @@
+import { IColor } from '../models/HomeData'
+
 import ScrollContainer from '../components/ScrollContainer/Index'
 import Bg from '../views/My/Bg'
+import NavBar from '../views/My/NavBar'
 
 @Component
 export default struct My {
   @Builder
-  navBuilder() {
+  navBuilder($$: IColor) {
+    NavBar($$)
   }
 
   @Builder
