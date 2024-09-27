@@ -78,15 +78,21 @@ export type IRentInfoList = IRentInfoItem[]
 
 export interface IRentRoomDetail extends Omit<IRoomRecommendItem, 'housePicture'> {
   "housePicture": IHousePictureList
-  "distance_info": IDistanceInfo
+  "distanceInfo": IDistanceInfo
   "rentTerm": IRentTerm
   "metaInfo": IMetaInfoList
   "discounts": IDiscountsList
   "householdItem": IHouseholdList
   "support": ISupportList
   "rentInfo": IRentInfoList
+  rentPriceUnitListing: string
 }
 
 export interface IParams {
   id: string
+}
+
+export interface IRoomName {
+  spaceName: string
+  total: number
 }
