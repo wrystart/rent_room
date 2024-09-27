@@ -9,7 +9,9 @@ import {
   IProvinceList,
   IRentPriceItem,
   IRentPriceList,
-  ISearchRoomListParams
+  ISearchRoomListParams,
+  ISortItem,
+  ISortList
 } from '../../models/RentRoomListData'
 import globalEmitter from '../../utils/emitter'
 import rvp from '../../utils/responsive/Index'
@@ -110,6 +112,34 @@ export default struct SearchFilter {
     }]
   @State rentText: string = ''
   @State submitRentPriceText: string = ''
+  // 排序列表
+  @State sortList: ISortList = [{
+    icon: $r('app.media.sort'),
+    text: '综合排序',
+    orderBy: '',
+    orderType: ''
+  }, {
+    icon: $r('app.media.rent'),
+    text: '价格从低到高',
+    orderBy: 'price',
+    orderType: 'asc'
+  }, {
+    icon: $r('app.media.rent'),
+    text: '价格从高到低',
+    orderBy: 'price',
+    orderType: 'desc'
+  }, {
+    icon: $r('app.media.area'),
+    text: '面积从大到小',
+    orderBy: 'area',
+    orderType: 'desc'
+  }, {
+    icon: $r('app.media.area'),
+    text: '面积从小到大',
+    orderBy: 'area',
+    orderType: 'asc'
+  }]
+  @State sortText: string = ''
   // 设置显示搜索区域
   showSearchArea = (text: string) => {
     // 点击相同的取反，点击不同的显示
@@ -138,7 +168,6 @@ export default struct SearchFilter {
     } else if (this.currentSearchText === '租金') {
       this.rentText = this.submitRentPriceText
     }
-
   }
 
   // 重置位置
@@ -356,7 +385,24 @@ export default struct SearchFilter {
 
   @Builder
   sortBuilder() {
-    Text('排序')
+    Column() {
+      ForEach(this.sortList, (sort: ISortItem) => {
+        Row({ space: rvp(8) }) {
+          Image(sort.icon).width(rvp(16)).height(rvp(16))
+          Text(sort.text)
+            .fontSize(rvp(12))
+            .fontColor(this.sortText === sort.text ? '#67C0A8' : $r('app.color.gray_second'))
+        }.height(rvp(34)).onClick(() => {
+          this.sortText = sort.text
+          const searchOptions: Partial<ISearchRoomListParams> = {
+            orderBy: sort.orderBy,
+            orderType: sort.orderType
+          }
+          globalEmitter.emit('search', searchOptions)
+          this.hideSearchArea()
+        })
+      }, (sort: ISortItem) => sort.text)
+    }.width('100%').alignItems(HorizontalAlign.Start).padding({ left: rvp(32), bottom: rvp(16) })
   }
 
   getSearchText = (text: string) => {
@@ -366,10 +412,8 @@ export default struct SearchFilter {
       return this.submitPaymentWayName || text
     } else if (text === '租金') {
       return this.submitRentPriceText || text
-    } else if (text === '排序') {
-      return text
     } else {
-      return text
+      return this.sortText || text
     }
   }
   getSearchTextColor = (text: string) => {
@@ -379,10 +423,9 @@ export default struct SearchFilter {
       return this.submitPaymentWayName ? $r('app.color.primary') : '#333333'
     } else if (text === '租金') {
       return this.submitRentPriceText ? $r('app.color.primary') : '#333333'
-    } else if (text === '排序') {
-      return text
+    } else {
+      return this.sortText ? $r('app.color.primary') : '#333333'
     }
-    return text
   }
 
   build() {

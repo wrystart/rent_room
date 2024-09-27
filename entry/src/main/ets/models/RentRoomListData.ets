@@ -119,3 +119,13 @@ export interface IRentPriceItem {
 }
 
 export type IRentPriceList = IRentPriceItem[]
+
+export interface ISortItem {
+
+  icon: Resource,
+  text: string,
+  orderBy: string,
+  orderType: string
+}
+
+export type ISortList = ISortItem[]
