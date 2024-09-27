@@ -47,6 +47,10 @@ struct RentRoomDetail {
   @State roomNameList: IRoomName[] = []
   // 房间图片列表
   @State roomPictureList: string[] = []
+  // 选中下标
+  @State currentRoomIndex: number = 0
+  scrollerForRoomPicture: Scroller = new Scroller()
+  @State isScroll: boolean = false;
   // 获取详情
   getRoomDetail = async () => {
     // const params = router.getParams() as IParams
@@ -73,31 +77,50 @@ struct RentRoomDetail {
     Column() {
       Navbar({ title: this.room.houseTitle })
       List({ space: rvp(16) }) {
-        ForEach(this.roomNameList, (roomName: IRoomName) => {
+        ForEach(this.roomNameList, (roomName: IRoomName, index) => {
           ListItem() {
-            Text(`${roomName.spaceName}(${roomName.total})`).fontSize(rvp(14)).fontColor($r('app.color.gray_second'))
-          }
+            Column({ space: rvp(4) }) {
+              Text(`${roomName.spaceName}(${roomName.total})`)
+                .fontSize(rvp(14))
+                .fontColor(this.currentRoomIndex === index ? $r('app.color.black') : $r('app.color.gray_second'))
+              if (this.currentRoomIndex === index) {
+                Row() {
+                }.width(rvp(16)).height(rvp(2)).backgroundColor($r('app.color.primary'))
+              }
+            }
+          }.onClick(() => {
+            // 节流
+            if (this.isScroll) {
+              return;
+            }
+            this.currentRoomIndex = index
+            // 下标，之前图片数量的总和
+            const total = this.roomNameList.reduce((p: number, c, i) => i < index ? p + c.total : p, 0)
+            this.scrollerForRoomPicture.scrollToIndex(total, true)
+            this.isScroll = true
+            setTimeout(() => {
+              this.isScroll = false
+            }, 700)
+          })
         }, (roomName: IRoomName) => roomName.spaceName)
       }
       .width('100%')
-      .height(rvp(52))
+      .height(rvp(58))
       .padding(rvp(PADDING))
       .listDirection(Axis.Horizontal)
       .edgeEffect(EdgeEffect.None)
       .scrollBar(BarState.Off)
 
-      List({ space: rvp(16) }) {
-        ListItem() {
-        }.width(0)
-
+      // 注意：这个ForEach有坑，如果指定的key值相同，内容则不会渲染
+      List({ scroller: this.scrollerForRoomPicture }) {
         ForEach(this.roomPictureList, (pic: string) => {
           ListItem() {
             Image(pic).width(rvp(318)).height('100%').objectFit(ImageFit.Fill)
-          }
-        }, (pic: string) => pic)
-        
+          }.margin({ left: rvp(16) })
+        })
+
         ListItem() {
-        }.width(0)
+        }.width(rvp(16))
       }
       .width('100%')
       .height(rvp(208))
@@ -105,6 +128,20 @@ struct RentRoomDetail {
       .listDirection(Axis.Horizontal)
       .edgeEffect(EdgeEffect.None)
       .scrollBar(BarState.Off)
+      .onScrollIndex((startIndex) => {
+        if (this.isScroll) {
+          return
+        }
+        this.currentRoomIndex = this.roomNameList.findIndex((item) => {
+          if (startIndex < item.total) {
+            return true
+          } else {
+            startIndex -= item.total
+            return false
+          }
+        })
+
+      })
     }
     .height('100%')
     .width('100%')
