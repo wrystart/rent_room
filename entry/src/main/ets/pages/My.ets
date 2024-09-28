@@ -6,6 +6,7 @@ import ScrollContainer from '../components/ScrollContainer/Index'
 import Bg from '../views/My/Bg'
 import NavBar from '../views/My/NavBar'
 import UserInfo from '../views/My/UserInfo'
+import TimePlan from '../views/My/TimePlan'
 
 @Component
 export default struct My {
@@ -22,6 +23,7 @@ export default struct My {
       Bg()
       Column() {
         UserInfo()
+        TimePlan()
       }.padding({ left: rvp(PADDING), right: rvp(PADDING), top: rvp(44) + this.topHeight })
     }.width('100%').align(Alignment.TopStart)
   }
