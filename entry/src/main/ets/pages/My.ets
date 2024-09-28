@@ -7,6 +7,7 @@ import Bg from '../views/My/Bg'
 import NavBar from '../views/My/NavBar'
 import UserInfo from '../views/My/UserInfo'
 import TimePlan from '../views/My/TimePlan'
+import Order from '../views/My/Order'
 
 @Component
 export default struct My {
@@ -24,6 +25,7 @@ export default struct My {
       Column() {
         UserInfo()
         TimePlan()
+        Order()
       }.padding({ left: rvp(PADDING), right: rvp(PADDING), top: rvp(44) + this.topHeight })
     }.width('100%').align(Alignment.TopStart)
   }
