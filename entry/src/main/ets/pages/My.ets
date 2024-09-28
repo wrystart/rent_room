@@ -1,11 +1,16 @@
 import { IColor } from '../models/HomeData'
+import rvp from '../utils/responsive/Index'
+import { PADDING } from '../constants/size'
 
 import ScrollContainer from '../components/ScrollContainer/Index'
 import Bg from '../views/My/Bg'
 import NavBar from '../views/My/NavBar'
+import UserInfo from '../views/My/UserInfo'
 
 @Component
 export default struct My {
+  @StorageProp('topHeight') topHeight: number = 0;
+
   @Builder
   navBuilder($$: IColor) {
     NavBar($$)
@@ -15,7 +20,10 @@ export default struct My {
   contentBuilder() {
     Stack() {
       Bg()
-    }.width('100%')
+      Column() {
+        UserInfo()
+      }.padding({ left: rvp(PADDING), right: rvp(PADDING), top: rvp(44) + this.topHeight })
+    }.width('100%').align(Alignment.TopStart)
   }
 
   build() {
