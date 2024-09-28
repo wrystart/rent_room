@@ -1,6 +1,7 @@
 import Avatar from '../../components/Avatar/Index'
 
 import rvp from '../../utils/responsive/Index'
+import { router } from '@kit.ArkUI'
 
 @Component
 export default struct UserInfo {
@@ -13,6 +14,10 @@ export default struct UserInfo {
         Text('Hi，小谷粒').fontSize(rvp(16)).fontColor($r('app.color.white')).fontWeight(700)
         Text('谷粒点15').fontSize(rvp(12)).fontColor($r('app.color.white'))
       }.alignItems(HorizontalAlign.Start)
-    }.margin({ top: rvp(11) }).width('100%')
+    }.margin({ top: rvp(11) }).width('100%').onClick(() => {
+      router.pushUrl({
+        url: 'pages/Login/LoginPhone'
+      })
+    })
   }
 }
