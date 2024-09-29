@@ -7,7 +7,8 @@ import {
   IRentInfoList,
   IRentRoomDetail,
   IRentTerm,
-  IRoomName
+  IRoomName,
+  ISupportList
 } from '../../models/RentRoomDetailData'
 import { ITagList } from '../../models/HomeData'
 import ScrollContainer from '../../components/ScrollContainer/Index'
@@ -21,6 +22,7 @@ import { PADDING } from '../../constants/size'
 import NavBar from '../../components/NavBar/Index'
 import RentInfo from '../../views/RentRoomList/RentInfo'
 import HouseholdItem from '../../views/RentRoomList/HouseholdItem'
+import SupportList from '../../views/RentRoomList/SupportList'
 
 @Entry
 @Component
@@ -75,6 +77,7 @@ struct RentRoomDetail {
   @State rentTerm: Partial<IRentTerm> = {}
   @State rentInfoList: IRentInfoList = []
   @State householdList: IHouseholdList = []
+  @State supportList: ISupportList = []
   // 获取详情
   getRoomDetail = async () => {
     // const params = router.getParams() as IParams
@@ -87,6 +90,7 @@ struct RentRoomDetail {
     this.rentTerm = result.rentTerm
     this.rentInfoList = result.rentInfo
     this.householdList = result.householdItem
+    this.supportList = result.support
     this.roomNameList = result.housePicture.map(item => {
       const roomName: IRoomName = {
         spaceName: item.spaceName,
@@ -186,6 +190,7 @@ struct RentRoomDetail {
         RentTerm({ rentTerm: $rentTerm })
         RentInfo({ rentInfoList: $rentInfoList })
         HouseholdItem({ householdList: $householdList })
+        SupportList({ supportList: $supportList })
       }.padding({ left: rvp(PADDING), right: rvp(PADDING) })
     }.backgroundColor($r('app.color.white')).margin({ top: rvp(44) })
   }
