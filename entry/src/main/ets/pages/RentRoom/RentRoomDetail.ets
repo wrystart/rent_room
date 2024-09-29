@@ -4,6 +4,7 @@ import Navbar from '../../components/NavBar/Index'
 import { IRentRoomDetail, IRoomName } from '../../models/RentRoomDetailData'
 import rvp from '../../utils/responsive/Index'
 import { PADDING } from '../../constants/size'
+import RentPrice from '../../views/RentRoomList/RentPrice'
 
 @Entry
 @Component
@@ -142,6 +143,10 @@ struct RentRoomDetail {
         })
 
       })
+
+      Column() {
+        RentPrice({ rentPriceListing: this.room.rentPriceUnitListing, rentPriceUnit: this.room.rentPriceUnit })
+      }.padding({ left: rvp(PADDING), right: rvp(PADDING) })
     }
     .height('100%')
     .width('100%')
