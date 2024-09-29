@@ -337,18 +337,22 @@ struct RentRoomDetail {
         .margin({ top: rvp(PADDING), bottom: rvp(PADDING) })
 
         Button('预约看房').type(ButtonType.Normal).width('100%').backgroundColor('#24A17B').onClick(async () => {
-          const params = router.getParams() as IParams;
-          const data: IReservationRoomParams = {
-            name: this.reservationData.name,
-            date: this.currentDate.date,
-            houseId: params.id,
-            phone: this.reservationData.phone,
-            comment: this.reservationData.comment
-          }
-          await reservationRoomApi(data)
+          try {
+            const params = router.getParams() as IParams
+            const data: IReservationRoomParams = {
+              name: this.reservationData.name,
+              date: this.currentDate.date,
+              houseId: params.id,
+              phone: this.reservationData.phone,
+              comment: this.reservationData.comment
+            }
+            await reservationRoomApi(data)
 
-          this.visible = false
-          promptAction.showToast({ message: '预约成功' })
+            this.visible = false
+            promptAction.showToast({ message: '预约成功' })
+          } catch (e) {
+            console.log(JSON.stringify(e))
+          }
         })
       }
     }.height('100%').alignContent(Alignment.Bottom)

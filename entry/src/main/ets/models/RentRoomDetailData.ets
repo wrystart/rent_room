@@ -103,3 +103,12 @@ export interface IFormatDate {
 }
 
 export type IFormatDateList = IFormatDate[]
+
+
+export interface IReservationRoomParams {
+  name: string,
+  date: string,
+  houseId: string,
+  phone: string,
+  comment: string
+}
