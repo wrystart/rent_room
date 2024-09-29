@@ -12,6 +12,8 @@ import { PADDING } from '../../constants/size'
 import RentPrice from '../../views/RentRoomList/RentPrice'
 import DiscountsList from '../../views/RentRoomList/DiscountsList'
 import MetaInfo from '../../views/RentRoomList/MetaInfo'
+import { ITagList } from '../../models/HomeData'
+import TagList from '../../views/RentRoomList/TagList'
 
 @Entry
 @Component
@@ -62,6 +64,7 @@ struct RentRoomDetail {
   @State discountsList: IDiscountsList = []
   @State metaInfoList: IMetaInfoList = []
   @State distanceInfo: Partial<IDistanceInfo> = {}
+  @State tagList: ITagList = []
   // 获取详情
   getRoomDetail = async () => {
     // const params = router.getParams() as IParams
@@ -70,6 +73,7 @@ struct RentRoomDetail {
     this.discountsList = result.discounts
     this.metaInfoList = result.metaInfo
     this.distanceInfo = result.distanceInfo
+    this.tagList = result.tags
     this.roomNameList = result.housePicture.map(item => {
       const roomName: IRoomName = {
         spaceName: item.spaceName,
@@ -160,6 +164,7 @@ struct RentRoomDetail {
         RentPrice({ rentPriceListing: this.room.rentPriceUnitListing, rentPriceUnit: this.room.rentPriceUnit })
         DiscountsList({ discountsList: this.discountsList })
         MetaInfo({ metaInfoList: this.metaInfoList, distanceInfo: this.distanceInfo })
+        TagList({ tagList: this.tagList })
       }.padding({ left: rvp(PADDING), right: rvp(PADDING) })
     }
     .height('100%')
