@@ -1,10 +1,10 @@
 import { getRoomDetailApi } from '../../api/rentRoomDetail'
-import { JSON } from '@kit.ArkTS'
 import Navbar from '../../components/NavBar/Index'
-import { IRentRoomDetail, IRoomName } from '../../models/RentRoomDetailData'
+import { IDiscountsList, IRentRoomDetail, IRoomName } from '../../models/RentRoomDetailData'
 import rvp from '../../utils/responsive/Index'
 import { PADDING } from '../../constants/size'
 import RentPrice from '../../views/RentRoomList/RentPrice'
+import DiscountsList from '../../views/RentRoomList/DiscountsList'
 
 @Entry
 @Component
@@ -52,12 +52,13 @@ struct RentRoomDetail {
   @State currentRoomIndex: number = 0
   scrollerForRoomPicture: Scroller = new Scroller()
   @State isScroll: boolean = false;
+  @State discountsList: IDiscountsList = []
   // 获取详情
   getRoomDetail = async () => {
     // const params = router.getParams() as IParams
     const result = await getRoomDetailApi('BJ1827549448671068160')
     this.room = result
-    console.log(JSON.stringify(result))
+    this.discountsList = result.discounts
     this.roomNameList = result.housePicture.map(item => {
       const roomName: IRoomName = {
         spaceName: item.spaceName,
@@ -146,6 +147,7 @@ struct RentRoomDetail {
 
       Column() {
         RentPrice({ rentPriceListing: this.room.rentPriceUnitListing, rentPriceUnit: this.room.rentPriceUnit })
+        DiscountsList({ discountsList: this.discountsList })
       }.padding({ left: rvp(PADDING), right: rvp(PADDING) })
     }
     .height('100%')
