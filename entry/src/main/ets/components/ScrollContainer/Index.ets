@@ -3,6 +3,7 @@ import { window } from '@kit.ArkUI';
 
 @Component
 export default struct Index {
+  @Prop isDark: boolean = false;
   @StorageProp('topHeight') topHeight: number = 0;
   @BuilderParam navBuilderParam: ($$: IColor) => void = this.customBuilder
   @BuilderParam contentBuilderParam: () => void = this.customBuilder
@@ -14,6 +15,12 @@ export default struct Index {
   windowClass?: window.Window
   getWindowClass = async () => {
     this.windowClass = await window.getLastWindow(getContext(this))
+
+    if (this.isDark) {
+      this.windowClass!.setWindowSystemBarProperties({
+        statusBarContentColor: '#000000'
+      })
+    }
   }
   calcColor = () => {
 
@@ -22,6 +29,9 @@ export default struct Index {
       // 到达顶部，渐变开始
       this.bgColor = 'rgba(255,255,255,0)';
       this.fontColor = 'rgb(255,255,255)';
+      if (this.isDark) {
+        return
+      }
       this.windowClass!.setWindowSystemBarProperties({
         statusBarContentColor: '#ffffff'
       })
@@ -36,6 +46,9 @@ export default struct Index {
       // 渐变全部完成
       this.bgColor = 'rgb(255,255,255)';
       this.fontColor = 'rgb(0,0,0)';
+      if (this.isDark) {
+        return
+      }
       this.windowClass!.setWindowSystemBarProperties({
         statusBarContentColor: '#000000'
       })
@@ -44,6 +57,8 @@ export default struct Index {
 
   aboutToAppear() {
     this.getWindowClass()
+
+
   }
 
   @Builder

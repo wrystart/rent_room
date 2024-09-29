@@ -28,6 +28,7 @@ import Book from '../../views/RentRoomList/Book'
 @Entry
 @Component
 struct RentRoomDetail {
+  @StorageProp('topHeight') topHeight: number = 0
   @State room: IRentRoomDetail = {
     "houseTitle": "",
     "address": "",
@@ -150,6 +151,7 @@ struct RentRoomDetail {
       .listDirection(Axis.Horizontal)
       .edgeEffect(EdgeEffect.None)
       .scrollBar(BarState.Off)
+      .margin({ top: rvp(44) + this.topHeight })
 
       // 注意：这个ForEach有坑，如果指定的key值相同，内容则不会渲染
       List({ scroller: this.scrollerForRoomPicture }) {
@@ -202,7 +204,7 @@ struct RentRoomDetail {
           .backgroundColor($r('app.color.white'))
           .border({ width: 1, color: '#F5F5F5', radius: rvp(BORDER_RADIUS_S) })
       }.padding({ left: rvp(PADDING), right: rvp(PADDING) })
-    }.backgroundColor($r('app.color.white')).margin({ top: rvp(44) })
+    }.backgroundColor($r('app.color.white'))
   }
 
   build() {
@@ -210,6 +212,7 @@ struct RentRoomDetail {
       ScrollContainer({
         navBuilderParam: this.NavBarRender.bind(this),
         contentBuilderParam: this.ContentRender.bind(this),
+        isDark: true
       })
       Book()
     }.height('100%').alignContent(Alignment.Bottom)
