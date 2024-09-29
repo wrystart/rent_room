@@ -29,7 +29,13 @@ export default struct My {
         TimePlan()
         Order()
         PlanList()
-      }.padding({ left: rvp(PADDING), right: rvp(PADDING), top: rvp(44) + this.topHeight })
+      }
+      .padding({
+        left: rvp(PADDING),
+        right: rvp(PADDING),
+        top: rvp(44) + this.topHeight,
+        bottom: rvp(PADDING)
+      })
     }.width('100%').align(Alignment.TopStart)
   }
 

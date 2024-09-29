@@ -9,6 +9,7 @@ import { getServiceDataApi } from '../api/service'
 import { ICleaningServiceInfoList, IHomeServiceList, IServiceActivity, IVipServiceList } from '../models/ServiceData'
 import ServiceCalendar from '../views/Service/ServiceCalendar'
 import ServiceClean from '../views/Service/ServiceClean'
+import { IColor } from '../models/HomeData'
 
 @Component
 export default struct Service {
@@ -38,8 +39,8 @@ export default struct Service {
   }
 
   @Builder
-  navBuilder() {
-    NavBar()
+  navBuilder($$: IColor) {
+    NavBar({ fontColor: $$.fontColor })
 
   }
 
