@@ -2,6 +2,7 @@ import { getRoomDetailApi } from '../../api/rentRoomDetail'
 import {
   IDiscountsList,
   IDistanceInfo,
+  IHouseholdList,
   IMetaInfoList,
   IRentInfoList,
   IRentRoomDetail,
@@ -19,6 +20,7 @@ import rvp from '../../utils/responsive/Index'
 import { PADDING } from '../../constants/size'
 import NavBar from '../../components/NavBar/Index'
 import RentInfo from '../../views/RentRoomList/RentInfo'
+import HouseholdItem from '../../views/RentRoomList/HouseholdItem'
 
 @Entry
 @Component
@@ -72,6 +74,7 @@ struct RentRoomDetail {
   @State tagList: ITagList = []
   @State rentTerm: Partial<IRentTerm> = {}
   @State rentInfoList: IRentInfoList = []
+  @State householdList: IHouseholdList = []
   // 获取详情
   getRoomDetail = async () => {
     // const params = router.getParams() as IParams
@@ -83,6 +86,7 @@ struct RentRoomDetail {
     this.tagList = result.tags
     this.rentTerm = result.rentTerm
     this.rentInfoList = result.rentInfo
+    this.householdList = result.householdItem
     this.roomNameList = result.housePicture.map(item => {
       const roomName: IRoomName = {
         spaceName: item.spaceName,
@@ -181,6 +185,7 @@ struct RentRoomDetail {
         TagList({ tagList: $tagList })
         RentTerm({ rentTerm: $rentTerm })
         RentInfo({ rentInfoList: $rentInfoList })
+        HouseholdItem({ householdList: $householdList })
       }.padding({ left: rvp(PADDING), right: rvp(PADDING) })
     }.backgroundColor($r('app.color.white')).margin({ top: rvp(44) })
   }
