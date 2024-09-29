@@ -3,6 +3,7 @@ import {
   IDiscountsList,
   IDistanceInfo,
   IMetaInfoList,
+  IRentInfoList,
   IRentRoomDetail,
   IRentTerm,
   IRoomName
@@ -17,6 +18,7 @@ import RentTerm from '../../views/RentRoomList/RentTerm'
 import rvp from '../../utils/responsive/Index'
 import { PADDING } from '../../constants/size'
 import NavBar from '../../components/NavBar/Index'
+import RentInfo from '../../views/RentRoomList/RentInfo'
 
 @Entry
 @Component
@@ -69,6 +71,7 @@ struct RentRoomDetail {
   @State distanceInfo: Partial<IDistanceInfo> = {}
   @State tagList: ITagList = []
   @State rentTerm: Partial<IRentTerm> = {}
+  @State rentInfoList: IRentInfoList = []
   // 获取详情
   getRoomDetail = async () => {
     // const params = router.getParams() as IParams
@@ -79,6 +82,7 @@ struct RentRoomDetail {
     this.distanceInfo = result.distanceInfo
     this.tagList = result.tags
     this.rentTerm = result.rentTerm
+    this.rentInfoList = result.rentInfo
     this.roomNameList = result.housePicture.map(item => {
       const roomName: IRoomName = {
         spaceName: item.spaceName,
@@ -176,6 +180,7 @@ struct RentRoomDetail {
         MetaInfo({ metaInfoList: $metaInfoList, distanceInfo: $distanceInfo })
         TagList({ tagList: $tagList })
         RentTerm({ rentTerm: $rentTerm })
+        RentInfo({ rentInfoList: $rentInfoList })
       }.padding({ left: rvp(PADDING), right: rvp(PADDING) })
     }.backgroundColor($r('app.color.white')).margin({ top: rvp(44) })
   }
