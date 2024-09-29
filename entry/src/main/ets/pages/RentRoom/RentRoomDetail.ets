@@ -1,10 +1,17 @@
 import { getRoomDetailApi } from '../../api/rentRoomDetail'
 import Navbar from '../../components/NavBar/Index'
-import { IDiscountsList, IRentRoomDetail, IRoomName } from '../../models/RentRoomDetailData'
+import {
+  IDiscountsList,
+  IDistanceInfo,
+  IMetaInfoList,
+  IRentRoomDetail,
+  IRoomName
+} from '../../models/RentRoomDetailData'
 import rvp from '../../utils/responsive/Index'
 import { PADDING } from '../../constants/size'
 import RentPrice from '../../views/RentRoomList/RentPrice'
 import DiscountsList from '../../views/RentRoomList/DiscountsList'
+import MetaInfo from '../../views/RentRoomList/MetaInfo'
 
 @Entry
 @Component
@@ -53,12 +60,16 @@ struct RentRoomDetail {
   scrollerForRoomPicture: Scroller = new Scroller()
   @State isScroll: boolean = false;
   @State discountsList: IDiscountsList = []
+  @State metaInfoList: IMetaInfoList = []
+  @State distanceInfo: Partial<IDistanceInfo> = {}
   // 获取详情
   getRoomDetail = async () => {
     // const params = router.getParams() as IParams
     const result = await getRoomDetailApi('BJ1827549448671068160')
     this.room = result
     this.discountsList = result.discounts
+    this.metaInfoList = result.metaInfo
+    this.distanceInfo = result.distanceInfo
     this.roomNameList = result.housePicture.map(item => {
       const roomName: IRoomName = {
         spaceName: item.spaceName,
@@ -148,6 +159,7 @@ struct RentRoomDetail {
       Column() {
         RentPrice({ rentPriceListing: this.room.rentPriceUnitListing, rentPriceUnit: this.room.rentPriceUnit })
         DiscountsList({ discountsList: this.discountsList })
+        MetaInfo({ metaInfoList: this.metaInfoList, distanceInfo: this.distanceInfo })
       }.padding({ left: rvp(PADDING), right: rvp(PADDING) })
     }
     .height('100%')
