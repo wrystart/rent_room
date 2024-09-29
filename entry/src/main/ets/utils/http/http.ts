@@ -9,6 +9,10 @@ const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     // 将来会添加token参数
+    const token = AppStorage.get<string>('token')
+    if (token) {
+      config.headers.token = token;
+    }
     return config;
   }
 )

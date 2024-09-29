@@ -7,6 +7,8 @@ import My from './My'
 import rvp from '../utils/responsive/Index'
 import { window } from '@kit.ArkUI'
 
+// PersistentStorage 特点：需要在首个页面进行初始化
+PersistentStorage.persistProp('token', '')
 
 @Entry
 @Component

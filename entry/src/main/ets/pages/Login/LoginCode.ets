@@ -1,12 +1,10 @@
-import { loginApi, sendSMSCodeApi } from '../../api/login';
+import { getUserInfoApi, loginApi, sendSMSCodeApi } from '../../api/login';
 import NavBar from '../../components/NavBar/Index';
 import rvp from '../../utils/responsive/Index';
 import { router } from '@kit.ArkUI';
 
 
 interface IParams { phone: string }
-
-PersistentStorage.persistProp('token', '')
 
 @Entry
 @Component
@@ -24,6 +22,9 @@ struct LoginCode {
   login = async () => {
     const result = await loginApi(this.phone, this.code)
     this.token = result.token
+    const userData = await getUserInfoApi()
+    AppStorage.setOrCreate('user', userData)
+    // 获取完数据，在别的页面需要使用数据，用AppStorage
     router.back({
       url: 'pages/Index'
     })
