@@ -29,6 +29,5 @@ export default struct NavBar {
     .height(rvp(44))
     .justifyContent(FlexAlign.SpaceBetween)
     .padding({ left: rvp(PADDING), right: rvp(PADDING) })
-    .margin({ top: this.topHeight })
   }
 }
