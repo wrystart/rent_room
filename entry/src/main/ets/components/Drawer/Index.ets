@@ -38,6 +38,7 @@ export default struct Index {
           topLeft: rvp(16),
           topRight: rvp(16)
         })
+        .alignItems(HorizontalAlign.Start)
         .transition(TransitionEffect.translate({ x: 0, y: this.contentHeight })
           .animation({ duration: 200, curve: Curve.Linear }))
       }

@@ -223,13 +223,114 @@ struct RentRoomDetail {
       Book({ visible: $visible })
 
       Drawer({ visible: $visible, contentHeight: 180 }) {
-        Text('xxx')
-        Text('xxx')
-        Text('xxx')
-        Text('xxx')
-        Text('xxx')
-        Text('xxx')
-        Text('xxx')
+        Text('预约信息').fontSize(rvp(18)).fontWeight(700).fontColor($r('app.color.black'))
+        Column() {
+          Row({ space: rvp(PADDING) }) {
+            Text('姓名').width(rvp(56)).fontSize(rvp(14))
+            TextInput({ placeholder: '请输入姓名' }).backgroundColor($r('app.color.white')).layoutWeight(1)
+          }.width('100%')
+
+          Row({ space: rvp(PADDING) }) {
+            Text('手机号').width(rvp(56)).fontSize(rvp(14))
+            TextInput({ placeholder: '请输入手机号' }).backgroundColor($r('app.color.white')).layoutWeight(1)
+          }.width('100%')
+
+          Row({ space: rvp(PADDING) }) {
+            Text('预约日期').width(rvp(56)).fontSize(rvp(14))
+            Text('2024').fontSize(rvp(14)).fontColor('#999').layoutWeight(1)
+            Image($r('app.media.arrow_up_5')).width(rvp(24)).height(rvp(24))
+          }.width('100%').margin({ top: rvp(10), bottom: rvp(5) })
+
+          Grid() {
+            GridItem() {
+              Column() {
+                Text('今天').fontSize(rvp(10)).fontColor('#999')
+                Text('2024-08-10').fontSize(rvp(10)).fontColor('#999')
+              }
+              .height(rvp(32))
+              .width(rvp(73))
+              .border({
+                width: 1,
+                color: '#E4E4E4'
+              })
+              .borderRadius(rvp(BORDER_RADIUS_S))
+              .justifyContent(FlexAlign.Center)
+
+            }
+
+            GridItem() {
+              Column() {
+                Text('今天').fontSize(rvp(10)).fontColor('#999')
+                Text('2024-08-10').fontSize(rvp(10)).fontColor('#999')
+              }
+              .height(rvp(32))
+              .width(rvp(73))
+              .border({
+                width: 1,
+                color: '#E4E4E4'
+              })
+              .borderRadius(rvp(BORDER_RADIUS_S))
+              .justifyContent(FlexAlign.Center)
+
+            }
+
+            GridItem() {
+              Column() {
+                Text('今天').fontSize(rvp(10)).fontColor('#999')
+                Text('2024-08-10').fontSize(rvp(10)).fontColor('#999')
+              }
+              .height(rvp(32))
+              .width(rvp(73))
+              .border({
+                width: 1,
+                color: '#E4E4E4'
+              })
+              .borderRadius(rvp(BORDER_RADIUS_S))
+              .justifyContent(FlexAlign.Center)
+
+            }
+
+            GridItem() {
+              Column() {
+                Text('今天').fontSize(rvp(10)).fontColor('#999')
+                Text('2024-08-10').fontSize(rvp(10)).fontColor('#999')
+              }
+              .height(rvp(32))
+              .width(rvp(73))
+              .border({
+                width: 1,
+                color: '#E4E4E4'
+              })
+              .borderRadius(rvp(BORDER_RADIUS_S))
+              .justifyContent(FlexAlign.Center)
+
+            }
+          }
+          .width(rvp(231))
+          .columnsTemplate('1fr 1fr 1fr')
+          .columnsGap(rvp(6))
+          .rowsGap(rvp(8))
+          .height(rvp(80))
+          .alignSelf(ItemAlign.End)
+          .margin({ bottom: rvp(5) })
+
+          Row({ space: rvp(PADDING) }) {
+            Text('备注信息').width(rvp(56)).fontSize(rvp(14))
+            TextArea({ placeholder: '请输入备注信息' })
+              .backgroundColor('#F6F6F6')
+              .layoutWeight(1)
+              .borderRadius(0)
+              .maxLines(2)
+              .height(rvp(60))
+          }.width('100%')
+
+        }
+        .width('100%')
+        .backgroundColor($r('app.color.white'))
+        .padding(rvp(PADDING))
+        .margin({ top: rvp(PADDING), bottom: rvp(PADDING) })
+
+        Button('预约看房').type(ButtonType.Normal).width('100%').backgroundColor('#24A17B')
       }
     }.height('100%').alignContent(Alignment.Bottom)
   }
