@@ -24,6 +24,7 @@ import RentInfo from '../../views/RentRoomList/RentInfo'
 import HouseholdItem from '../../views/RentRoomList/HouseholdItem'
 import SupportList from '../../views/RentRoomList/SupportList'
 import Book from '../../views/RentRoomList/Book'
+import Drawer from '../../components/Drawer/Index'
 
 @Entry
 @Component
@@ -80,6 +81,7 @@ struct RentRoomDetail {
   @State rentInfoList: IRentInfoList = []
   @State householdList: IHouseholdList = []
   @State supportList: ISupportList = []
+  @State visible: boolean = false
   // 获取详情
   getRoomDetail = async () => {
     // const params = router.getParams() as IParams
@@ -210,11 +212,25 @@ struct RentRoomDetail {
   build() {
     Stack() {
       ScrollContainer({
-        navBuilderParam: this.NavBarRender.bind(this),
-        contentBuilderParam: this.ContentRender.bind(this),
+        navBuilderParam: () => {
+          this.NavBarRender()
+        },
+        contentBuilderParam: () => {
+          this.ContentRender()
+        },
         isDark: true
       })
-      Book()
+      Book({ visible: $visible })
+
+      Drawer({ visible: $visible, contentHeight: 180 }) {
+        Text('xxx')
+        Text('xxx')
+        Text('xxx')
+        Text('xxx')
+        Text('xxx')
+        Text('xxx')
+        Text('xxx')
+      }
     }.height('100%').alignContent(Alignment.Bottom)
   }
 }

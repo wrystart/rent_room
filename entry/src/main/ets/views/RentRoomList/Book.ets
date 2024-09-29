@@ -2,6 +2,8 @@ import rvp from '../../utils/responsive/Index'
 
 @Component
 export default struct Book {
+  @Link visible: boolean
+
   build() {
     Row() {
       Column({ space: rvp(4) }) {
@@ -19,6 +21,10 @@ export default struct Book {
         .backgroundColor('#24A17B')
         .padding({ left: rvp(30), right: rvp(30) })
         .height(rvp(34))
+        .onClick(() => {
+          this.visible = true
+        })
+
       Button('去看房', { type: ButtonType.Normal })
         .borderRadius(rvp(2))
         .backgroundColor('#6BE3BE')
