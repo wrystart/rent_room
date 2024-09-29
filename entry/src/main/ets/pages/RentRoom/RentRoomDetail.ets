@@ -1,4 +1,4 @@
-import { getRoomDetailApi } from '../../api/rentRoomDetail'
+import { getRoomDetailApi, reservationRoomApi } from '../../api/rentRoomDetail'
 import {
   IDiscountsList,
   IDistanceInfo,
@@ -6,11 +6,13 @@ import {
   IFormatDateList,
   IHouseholdList,
   IMetaInfoList,
+  IParams,
   IRentInfoList,
   IRentRoomDetail,
   IRentTerm,
+  IReservationRoomParams,
   IRoomName,
-  ISupportList
+  ISupportList,
 } from '../../models/RentRoomDetailData'
 import { ITagList } from '../../models/HomeData'
 import ScrollContainer from '../../components/ScrollContainer/Index'
@@ -28,6 +30,7 @@ import SupportList from '../../views/RentRoomList/SupportList'
 import Book from '../../views/RentRoomList/Book'
 import Drawer from '../../components/Drawer/Index'
 import createDateList from '../../utils/dateList'
+import { promptAction, router } from '@kit.ArkUI'
 
 @Entry
 @Component
@@ -88,10 +91,17 @@ struct RentRoomDetail {
   @State dateList: IFormatDateList = createDateList()
   @State currentDate: IFormatDate = this.dateList[0]
   @State isShowDateList: boolean = true
+  @State reservationData: IReservationRoomParams = {
+    "name": '',
+    "date": '',
+    "houseId": '',
+    "phone": '',
+    "comment": ''
+  }
   // 获取详情
   getRoomDetail = async () => {
-    // const params = router.getParams() as IParams
-    const result = await getRoomDetailApi('BJ1827549448671068160')
+    const params = router.getParams() as IParams
+    const result = await getRoomDetailApi(params.id)
     this.room = result
     this.discountsList = result.discounts
     this.metaInfoList = result.metaInfo
@@ -233,12 +243,22 @@ struct RentRoomDetail {
         Column() {
           Row({ space: rvp(PADDING) }) {
             Text('姓名').width(rvp(56)).fontSize(rvp(14))
-            TextInput({ placeholder: '请输入姓名' }).backgroundColor($r('app.color.white')).layoutWeight(1)
+            TextInput({ placeholder: '请输入姓名' })
+              .backgroundColor($r('app.color.white'))
+              .layoutWeight(1)
+              .onChange((val) => {
+                this.reservationData.name = val
+              })
           }.width('100%')
 
           Row({ space: rvp(PADDING) }) {
             Text('手机号').width(rvp(56)).fontSize(rvp(14))
-            TextInput({ placeholder: '请输入手机号' }).backgroundColor($r('app.color.white')).layoutWeight(1)
+            TextInput({ placeholder: '请输入手机号' })
+              .backgroundColor($r('app.color.white'))
+              .layoutWeight(1)
+              .onChange((val) => {
+                this.reservationData.phone = val
+              })
           }.width('100%')
 
           Row({ space: rvp(PADDING) }) {
@@ -305,6 +325,9 @@ struct RentRoomDetail {
               .borderRadius(0)
               .maxLines(2)
               .height(rvp(60))
+              .onChange((val) => {
+                this.reservationData.comment = val
+              })
           }.width('100%')
 
         }
@@ -313,7 +336,20 @@ struct RentRoomDetail {
         .padding(rvp(PADDING))
         .margin({ top: rvp(PADDING), bottom: rvp(PADDING) })
 
-        Button('预约看房').type(ButtonType.Normal).width('100%').backgroundColor('#24A17B')
+        Button('预约看房').type(ButtonType.Normal).width('100%').backgroundColor('#24A17B').onClick(async () => {
+          const params = router.getParams() as IParams;
+          const data: IReservationRoomParams = {
+            name: this.reservationData.name,
+            date: this.currentDate.date,
+            houseId: params.id,
+            phone: this.reservationData.phone,
+            comment: this.reservationData.comment
+          }
+          await reservationRoomApi(data)
+
+          this.visible = false
+          promptAction.showToast({ message: '预约成功' })
+        })
       }
     }.height('100%').alignContent(Alignment.Bottom)
   }
