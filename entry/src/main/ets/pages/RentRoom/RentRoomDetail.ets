@@ -2,6 +2,8 @@ import { getRoomDetailApi } from '../../api/rentRoomDetail'
 import {
   IDiscountsList,
   IDistanceInfo,
+  IFormatDate,
+  IFormatDateList,
   IHouseholdList,
   IMetaInfoList,
   IRentInfoList,
@@ -25,6 +27,7 @@ import HouseholdItem from '../../views/RentRoomList/HouseholdItem'
 import SupportList from '../../views/RentRoomList/SupportList'
 import Book from '../../views/RentRoomList/Book'
 import Drawer from '../../components/Drawer/Index'
+import createDateList from '../../utils/dateList'
 
 @Entry
 @Component
@@ -82,6 +85,9 @@ struct RentRoomDetail {
   @State householdList: IHouseholdList = []
   @State supportList: ISupportList = []
   @State visible: boolean = false
+  @State dateList: IFormatDateList = createDateList()
+  @State currentDate: IFormatDate = this.dateList[0]
+  @State isShowDateList: boolean = true
   // 获取详情
   getRoomDetail = async () => {
     // const params = router.getParams() as IParams
@@ -237,82 +243,59 @@ struct RentRoomDetail {
 
           Row({ space: rvp(PADDING) }) {
             Text('预约日期').width(rvp(56)).fontSize(rvp(14))
-            Text('2024').fontSize(rvp(14)).fontColor('#999').layoutWeight(1)
-            Image($r('app.media.arrow_up_5')).width(rvp(24)).height(rvp(24))
+            Text(`${this.currentDate.date}（${this.currentDate.week}）`)
+              .fontSize(rvp(14))
+              .fontColor('#999')
+              .layoutWeight(1)
+            if (this.isShowDateList) {
+              Image($r('app.media.arrow_up_5')).width(rvp(24)).height(rvp(24)).onClick(() => {
+                this.isShowDateList = false
+              })
+            } else {
+              Image($r('app.media.arrow_down_5')).width(rvp(24)).height(rvp(24)).onClick(() => {
+                this.isShowDateList = true
+              })
+
+            }
           }.width('100%').margin({ top: rvp(10), bottom: rvp(5) })
 
-          Grid() {
-            GridItem() {
-              Column() {
-                Text('今天').fontSize(rvp(10)).fontColor('#999')
-                Text('2024-08-10').fontSize(rvp(10)).fontColor('#999')
-              }
-              .height(rvp(32))
-              .width(rvp(73))
-              .border({
-                width: 1,
-                color: '#E4E4E4'
-              })
-              .borderRadius(rvp(BORDER_RADIUS_S))
-              .justifyContent(FlexAlign.Center)
+
+          if (this.isShowDateList) {
+            Grid() {
+              ForEach(this.dateList, (date: IFormatDate) => {
+                GridItem() {
+                  Column() {
+                    Text(`(${date.week})`)
+                      .fontSize(rvp(10))
+                      .fontColor(this.currentDate.date === date.date ? '#21A17B' : '#999')
+                    Text(date.date)
+                      .fontSize(rvp(10))
+                      .fontColor(this.currentDate.date === date.date ? '#21A17B' : '#999')
+                  }
+                  .height(rvp(32))
+                  .width(rvp(73))
+                  .border({
+                    width: 1,
+                    color: this.currentDate.date === date.date ? '#21A17B' : '#E4E4E4'
+                  })
+                  .borderRadius(rvp(BORDER_RADIUS_S))
+                  .justifyContent(FlexAlign.Center)
+
+                }.onClick(() => {
+                  this.currentDate = date
+                })
+
+              }, (date: IFormatDate) => date.date)
 
             }
-
-            GridItem() {
-              Column() {
-                Text('今天').fontSize(rvp(10)).fontColor('#999')
-                Text('2024-08-10').fontSize(rvp(10)).fontColor('#999')
-              }
-              .height(rvp(32))
-              .width(rvp(73))
-              .border({
-                width: 1,
-                color: '#E4E4E4'
-              })
-              .borderRadius(rvp(BORDER_RADIUS_S))
-              .justifyContent(FlexAlign.Center)
-
-            }
-
-            GridItem() {
-              Column() {
-                Text('今天').fontSize(rvp(10)).fontColor('#999')
-                Text('2024-08-10').fontSize(rvp(10)).fontColor('#999')
-              }
-              .height(rvp(32))
-              .width(rvp(73))
-              .border({
-                width: 1,
-                color: '#E4E4E4'
-              })
-              .borderRadius(rvp(BORDER_RADIUS_S))
-              .justifyContent(FlexAlign.Center)
-
-            }
-
-            GridItem() {
-              Column() {
-                Text('今天').fontSize(rvp(10)).fontColor('#999')
-                Text('2024-08-10').fontSize(rvp(10)).fontColor('#999')
-              }
-              .height(rvp(32))
-              .width(rvp(73))
-              .border({
-                width: 1,
-                color: '#E4E4E4'
-              })
-              .borderRadius(rvp(BORDER_RADIUS_S))
-              .justifyContent(FlexAlign.Center)
-
-            }
+            .width(rvp(231))
+            .columnsTemplate('1fr 1fr 1fr')
+            .columnsGap(rvp(6))
+            .rowsGap(rvp(8))
+            .height(rvp(118))
+            .alignSelf(ItemAlign.End)
+            .margin({ bottom: rvp(5) })
           }
-          .width(rvp(231))
-          .columnsTemplate('1fr 1fr 1fr')
-          .columnsGap(rvp(6))
-          .rowsGap(rvp(8))
-          .height(rvp(80))
-          .alignSelf(ItemAlign.End)
-          .margin({ bottom: rvp(5) })
 
           Row({ space: rvp(PADDING) }) {
             Text('备注信息').width(rvp(56)).fontSize(rvp(14))

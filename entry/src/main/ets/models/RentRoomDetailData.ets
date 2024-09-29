@@ -96,3 +96,10 @@ export interface IRoomName {
   spaceName: string
   total: number
 }
+
+export interface IFormatDate {
+  date: string
+  week: string
+}
+
+export type IFormatDateList = IFormatDate[]
