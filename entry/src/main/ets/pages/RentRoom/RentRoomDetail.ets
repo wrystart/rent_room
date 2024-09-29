@@ -1,19 +1,22 @@
 import { getRoomDetailApi } from '../../api/rentRoomDetail'
-import Navbar from '../../components/NavBar/Index'
 import {
   IDiscountsList,
   IDistanceInfo,
   IMetaInfoList,
   IRentRoomDetail,
+  IRentTerm,
   IRoomName
 } from '../../models/RentRoomDetailData'
-import rvp from '../../utils/responsive/Index'
-import { PADDING } from '../../constants/size'
+import { ITagList } from '../../models/HomeData'
+import ScrollContainer from '../../components/ScrollContainer/Index'
 import RentPrice from '../../views/RentRoomList/RentPrice'
 import DiscountsList from '../../views/RentRoomList/DiscountsList'
 import MetaInfo from '../../views/RentRoomList/MetaInfo'
-import { ITagList } from '../../models/HomeData'
 import TagList from '../../views/RentRoomList/TagList'
+import RentTerm from '../../views/RentRoomList/RentTerm'
+import rvp from '../../utils/responsive/Index'
+import { PADDING } from '../../constants/size'
+import NavBar from '../../components/NavBar/Index'
 
 @Entry
 @Component
@@ -65,6 +68,7 @@ struct RentRoomDetail {
   @State metaInfoList: IMetaInfoList = []
   @State distanceInfo: Partial<IDistanceInfo> = {}
   @State tagList: ITagList = []
+  @State rentTerm: Partial<IRentTerm> = {}
   // 获取详情
   getRoomDetail = async () => {
     // const params = router.getParams() as IParams
@@ -74,6 +78,7 @@ struct RentRoomDetail {
     this.metaInfoList = result.metaInfo
     this.distanceInfo = result.distanceInfo
     this.tagList = result.tags
+    this.rentTerm = result.rentTerm
     this.roomNameList = result.housePicture.map(item => {
       const roomName: IRoomName = {
         spaceName: item.spaceName,
@@ -90,9 +95,14 @@ struct RentRoomDetail {
     this.getRoomDetail()
   }
 
-  build() {
+  @Builder
+  NavBarRender() {
+    NavBar({ title: this.room.houseTitle })
+  }
+
+  @Builder
+  ContentRender() {
     Column() {
-      Navbar({ title: this.room.houseTitle })
       List({ space: rvp(16) }) {
         ForEach(this.roomNameList, (roomName: IRoomName, index) => {
           ListItem() {
@@ -162,12 +172,20 @@ struct RentRoomDetail {
 
       Column() {
         RentPrice({ rentPriceListing: this.room.rentPriceUnitListing, rentPriceUnit: this.room.rentPriceUnit })
-        DiscountsList({ discountsList: this.discountsList })
-        MetaInfo({ metaInfoList: this.metaInfoList, distanceInfo: this.distanceInfo })
-        TagList({ tagList: this.tagList })
+        DiscountsList({ discountsList: $discountsList })
+        MetaInfo({ metaInfoList: $metaInfoList, distanceInfo: $distanceInfo })
+        TagList({ tagList: $tagList })
+        RentTerm({ rentTerm: $rentTerm })
       }.padding({ left: rvp(PADDING), right: rvp(PADDING) })
-    }
-    .height('100%')
-    .width('100%')
+    }.backgroundColor($r('app.color.white')).margin({ top: rvp(44) })
+  }
+
+  build() {
+    Column() {
+      ScrollContainer({
+        navBuilderParam: this.NavBarRender.bind(this),
+        contentBuilderParam: this.ContentRender.bind(this),
+      })
+    }.height('100%')
   }
 }
