@@ -31,7 +31,7 @@ struct LoginPhone {
 
       Column() {
         Stack() {
-          TextInput({ placeholder: '请输入手机号', })
+          TextInput({ placeholder: '请输入手机号' })
             .type(InputType.Number)
             .maxLength(11)
             .backgroundColor('rgba(0, 0, 0, 0)')
@@ -85,10 +85,7 @@ struct LoginPhone {
             .onClick(() => {
               router.pushUrl({
                 url: 'pages/Login/LoginCode',
-                params: {
-                  phone: this.phone
-
-                }
+                params: { phone: this.phone }
               })
             })
         } else {
