@@ -52,7 +52,7 @@ struct LoginPhone {
               left: 0,
               right: 0
             })
-            .caretColor($r('app.color.primary'))
+            .caretColor('#C4EDCE')
             .onChange(this.handlePhoneChange)
           if (this.isValidPhone) {
             Image($r('app.media.success')).width(rvp(12)).height(rvp(8))

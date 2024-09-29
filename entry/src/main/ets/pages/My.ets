@@ -12,7 +12,8 @@ import PlanList from '../views/My/PlanList'
 
 @Component
 export default struct My {
-  @StorageProp('topHeight') topHeight: number = 0;
+  @StorageProp('topHeight') topHeight: number = 0
+  @StorageLink('token') token: string = ''
 
   @Builder
   navBuilder($$: IColor) {
