@@ -18,11 +18,12 @@ import MetaInfo from '../../views/RentRoomList/MetaInfo'
 import TagList from '../../views/RentRoomList/TagList'
 import RentTerm from '../../views/RentRoomList/RentTerm'
 import rvp from '../../utils/responsive/Index'
-import { PADDING } from '../../constants/size'
+import { BORDER_RADIUS_S, PADDING } from '../../constants/size'
 import NavBar from '../../components/NavBar/Index'
 import RentInfo from '../../views/RentRoomList/RentInfo'
 import HouseholdItem from '../../views/RentRoomList/HouseholdItem'
 import SupportList from '../../views/RentRoomList/SupportList'
+import Book from '../../views/RentRoomList/Book'
 
 @Entry
 @Component
@@ -191,16 +192,26 @@ struct RentRoomDetail {
         RentInfo({ rentInfoList: $rentInfoList })
         HouseholdItem({ householdList: $householdList })
         SupportList({ supportList: $supportList })
+        Button('查看全部内容')
+          .type(ButtonType.Normal)
+          .width('100%')
+          .height(rvp(44))
+          .fontSize(rvp(14))
+          .fontColor('#ABA9AC')
+          .margin({ top: rvp(25) })
+          .backgroundColor($r('app.color.white'))
+          .border({ width: 1, color: '#F5F5F5', radius: rvp(BORDER_RADIUS_S) })
       }.padding({ left: rvp(PADDING), right: rvp(PADDING) })
     }.backgroundColor($r('app.color.white')).margin({ top: rvp(44) })
   }
 
   build() {
-    Column() {
+    Stack() {
       ScrollContainer({
         navBuilderParam: this.NavBarRender.bind(this),
         contentBuilderParam: this.ContentRender.bind(this),
       })
-    }.height('100%')
+      Book()
+    }.height('100%').alignContent(Alignment.Bottom)
   }
 }
