@@ -1,10 +1,18 @@
+import { getDiscoverDataApi } from '../api/discover'
+
 @Component
-export default struct Discover{
+export default struct Discover {
+  aboutToAppear(): void {
+    this.getDiscoverData()
+  }
+
+  async getDiscoverData() {
+    await getDiscoverDataApi()
+  }
+
   build() {
-    Column(){
-      Text('Discover')
+    Column() {
+      Text("Discover");
     }
-    .width('100%')
-    .height('100%')
   }
 }
