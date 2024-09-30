@@ -1,8 +1,10 @@
 import { getDiscoverDataApi } from '../api/discover'
 import ScrollContainer from '../components/ScrollContainer/Index'
-import { IDanMuList } from '../models/DiscoverData'
+import { PADDING } from '../constants/size'
+import { IDanMuList, IPostZone } from '../models/DiscoverData'
 import { IColor } from '../models/HomeData'
 import rvp from '../utils/responsive/Index'
+import Ad from '../views/Discover/Ad'
 import BannerScroll from '../views/Discover/BannerScroll'
 import Bg from '../views/Discover/Bg'
 import NavBar from '../views/Discover/NavBar'
@@ -12,6 +14,16 @@ export default struct Discover {
   @StorageProp('topHeight') topHeight: number = 0
   @State danMuList1: IDanMuList = []
   @State danMuList2: IDanMuList = []
+  @State postZone: IPostZone = {
+    "mainPost": {
+      "followerNum": 0,
+      "title": '',
+      "userAvatar": '',
+      "userName": '',
+      "postContent": '',
+    },
+    "contentBlockList": []
+  }
 
   aboutToAppear(): void {
     this.getDiscoverData()
@@ -21,6 +33,7 @@ export default struct Discover {
     const discoverData = await getDiscoverDataApi()
     this.danMuList1 = discoverData.danMuList1
     this.danMuList2 = discoverData.danMuList2
+    this.postZone = discoverData.postZone
   }
 
   @Builder
@@ -38,7 +51,12 @@ export default struct Discover {
           BannerScroll({ bannerList: this.danMuList1 })
           BannerScroll({ bannerList: this.danMuList2 })
         }.width('100%').margin({ top: rvp(20) })
-      }.alignItems(HorizontalAlign.Start).padding({ top: this.topHeight })
+
+        Ad({ postZone: this.postZone })
+      }
+      .alignItems(HorizontalAlign.Start)
+      .padding({ top: this.topHeight, left: rvp(PADDING), right: rvp(PADDING) })
+      .width('100%')
     }.alignContent(Alignment.TopStart)
   }
 
