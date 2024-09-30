@@ -3,6 +3,7 @@ import { PADDING } from '../../constants/size'
 import rvp from '../../utils/responsive/Index'
 
 import type { INavItem, INavList } from '../../models/NavList'
+import router from '@ohos.router'
 
 @Component
 export default struct Order {
@@ -63,8 +64,12 @@ export default struct Order {
           ForEach(this.navList1, (nav: INavItem) => {
             Row({ space: rvp(4) }) {
               Image(nav.icon).width(rvp(16)).height(rvp(16))
-              Text(nav.text).fontSize(rvp(12)).fontColor($r('app.color.black'))
-            }
+              Text(nav.text).fontSize(rvp(14)).fontColor($r('app.color.black'))
+            }.onClick(() => {
+              if (nav.text === '约看') {
+                router.pushUrl({ url: 'pages/BookRentRoomList/BookRentRoomList' })
+              }
+            })
           }, (nav: INavItem) => nav.id + '')
         }.width('100%').justifyContent(FlexAlign.Center)
 
@@ -73,7 +78,7 @@ export default struct Order {
           ForEach(this.navList2, (nav: INavItem) => {
             Column({ space: rvp(6) }) {
               Image(nav.icon).width(rvp(16)).height(rvp(16))
-              Text(nav.text).fontSize(rvp(12)).fontColor($r('app.color.black'))
+              Text(nav.text).fontSize(rvp(14)).fontColor($r('app.color.black'))
             }
           }, (nav: INavItem) => nav.id + '')
         }.margin({ top: rvp(12) }).justifyContent(FlexAlign.Center).width('100%')
