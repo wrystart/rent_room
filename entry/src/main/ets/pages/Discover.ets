@@ -1,5 +1,7 @@
 import { getDiscoverDataApi } from '../api/discover'
 import ScrollContainer from '../components/ScrollContainer/Index'
+import { IColor } from '../models/HomeData'
+import NavBar from '../views/Discover/NavBar'
 
 @Component
 export default struct Discover {
@@ -12,8 +14,8 @@ export default struct Discover {
   }
 
   @Builder
-  navBuilder() {
-    Text('navBar')
+  navBuilder($$: IColor) {
+    NavBar({ bgColor: $$.bgColor })
   }
 
   @Builder
